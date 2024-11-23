@@ -33,7 +33,7 @@ document.querySelector('.login-button').addEventListener('click', function () {
       if (data.token) {
         localStorage.setItem('token', data.token);
         alert('Вітаем, ' + username + '!');
-        window.location.href = '/chat';
+        window.location.href = '/greeting';
       } else {
         throw new Error('Не атрымалі токен ад сервера');
       }
@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const token = localStorage.getItem('token');
   if (token) {
     alert('Вы ўжо аўтарызаваны!');
-    window.location.href = '/greeting.html';
+    window.location.href = '/greeting';
   }
 });
 

@@ -4,29 +4,33 @@ if (!localStorage.getItem('token')) {
     window.location.href = 'index.html';
 }
 
-// Падключэнне да Socket.IO серверу
+// Ініцыялізуем падключэнне WebSocket пасля таго, як скрыпт socket.io загружаны
 const socket = io('https://vilija.onrender.com', {
     auth: {
         token: localStorage.getItem('token'), // Перадача токена пры падключэнні
     },
 });
 
+socket.on('connect', () => {
+    console.log('Падключана да WebSocket сервера!');
+});
+
 // Функцыя для адпраўкі паведамлення
 function sendMessage() {
     const input = document.getElementById('chatInput');
-    const messages = document.getElementById('chatMessages');
     
     if (input.value.trim() !== '') {
-        // Адпраўка паведамлення праз WebSocket
         socket.emit('message', {
             sender: 'Карыстальнік 1', // Тут можна ўставіць рэальнае імя карыстальніка
             text: input.value.trim(),
         });
 
-        // Ачышчэнне поля ўводу
-        input.value = '';
+        input.value = ''; // Ачышчэнне поля ўводу
     }
 }
+
+
+
 
 // Абнаўленне спісу паведамленняў пры падключэнні
 socket.on('message', (message) => {

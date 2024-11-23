@@ -11,5 +11,8 @@
   "license": "ISC",
   "devDependencies": {
     "parcel": "^2.13.0"
+  },
+  "dependencies": {
+    "socket.io": "^4.8.1"
   }
 }

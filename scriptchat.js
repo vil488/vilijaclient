@@ -1,79 +1,83 @@
-
 // Праверка наяўнасці токена ў localStorage
 if (!localStorage.getItem('token')) {
     // Калі токен не знойдзены, перанакіроўваем на старонку лагіна
     window.location.href = 'index.html';
 }
 
+// Падключэнне да Socket.IO серверу
+const socket = io('https://vilija.onrender.com', {
+    auth: {
+        token: localStorage.getItem('token'), // Перадача токена пры падключэнні
+    },
+});
+
 // Функцыя для адпраўкі паведамлення
-
-
 function sendMessage() {
     const input = document.getElementById('chatInput');
     const messages = document.getElementById('chatMessages');
     
     if (input.value.trim() !== '') {
-        const message = document.createElement('div'); // Контэйнер для паведамлення
-        message.className = 'chat-message'; // Выкарыстанне класа для стылю
+        // Адпраўка паведамлення праз WebSocket
+        socket.emit('message', {
+            sender: 'Карыстальнік 1', // Тут можна ўставіць рэальнае імя карыстальніка
+            text: input.value.trim(),
+        });
 
-        const username = document.createElement('div'); // Элемент для імя
-        username.textContent = 'Карыстальнік 1'; // Задаем імя
-        username.className = 'chat-message-username'; // Выкарыстанне класа для стылю
-
-        const text = document.createElement('div'); // Элемент для тэксту
-        text.textContent = input.value.trim();
-
-        message.appendChild(username); // Дадаем імя ў паведамленне
-        message.appendChild(text); // Дадаем тэкст паведамлення
-        messages.appendChild(message); // Дадаем паведамленне ў блок
-        messages.scrollTop = messages.scrollHeight; // Пракрутка ўніз
-        input.value = ''; // Ачысціць поле ўводу
+        // Ачышчэнне поля ўводу
+        input.value = '';
     }
 }
 
+// Абнаўленне спісу паведамленняў пры падключэнні
+socket.on('message', (message) => {
+    const messages = document.getElementById('chatMessages');
     
-    
-    
-    // // Апрацоўка падзей на клавіятуры
-    // textarea.addEventListener('keydown', (event) => {
-    //     if (event.key === 'Enter') {
-    //         if (event.shiftKey) {
-    //             // Калі націснуты Shift + Enter, дадаем новы радок
-    //             return; // Нічога не робім, каб не адпраўляць паведамленне
-    //         }
-    //         event.preventDefault(); // Каб не было пераносу радка на Enter
-    //         sendMessage(); // Адпраўка паведамлення
-    //     }
-    // });
-    
+    // Стварыць элементы для паведамлення
+    const messageElement = document.createElement('div');
+    messageElement.className = 'chat-message';
 
-    document.getElementById('theme').addEventListener('click', function () {
-        // Змяняем клас тэмы ў body
-        document.body.classList.toggle('light-theme');
-        
-        // Захоўваем стан тэмы ў LocalStorage
-        const currentTheme = document.body.classList.contains('light-theme') ? 'light' : 'dark';
-        localStorage.setItem('theme', currentTheme);
-    });
-    
-    // Правяраем захаваную тэму пры загрузцы старонкі
-    document.addEventListener('DOMContentLoaded', function () {
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'light') {
-            document.body.classList.add('light-theme');
-        }
-    });
-    
-   // Дадаем абработчык для кнопкі выхаду
-const logoutButton = document.getElementById('logout');  // Паказваем на элемент кнопкі з id "logout"
+    const usernameElement = document.createElement('div');
+    usernameElement.className = 'chat-message-username';
+    usernameElement.textContent = message.sender; // Адлюстроўваем імя адпраўніка
 
-logoutButton.addEventListener('click', logout);  // Дадаем абработчык падзеі націску
+    const textElement = document.createElement('div');
+    textElement.textContent = message.text;
 
-// // Функцыя для выхаду
+    // Дадаць элементы ў паведамленне
+    messageElement.appendChild(usernameElement);
+    messageElement.appendChild(textElement);
+    messages.appendChild(messageElement);
+    
+    // Пракрутка ўніз
+    messages.scrollTop = messages.scrollHeight;
+});
+
+// Абработчык для кнопкі тэмы
+document.getElementById('theme').addEventListener('click', function () {
+    // Змяняем клас тэмы ў body
+    document.body.classList.toggle('light-theme');
+    
+    // Захоўваем стан тэмы ў LocalStorage
+    const currentTheme = document.body.classList.contains('light-theme') ? 'light' : 'dark';
+    localStorage.setItem('theme', currentTheme);
+});
+
+// Правяраем захаваную тэму пры загрузцы старонкі
+document.addEventListener('DOMContentLoaded', function () {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+        document.body.classList.add('light-theme');
+    }
+});
+
+// Функцыя для выхаду
 function logout() {
     // Выдаляем токен з localStorage
-    localStorage.removeItem('token'); // Замяніце 'token' на імя вашага токена
-
+    localStorage.removeItem('token');
     // Перанакіроўваем на старонку лагіна
-    window.location.href = 'index.html'; // Замяніце 'login.html' на URL вашай старонкі лагіна
+    window.location.href = 'index.html'; // Замяніце на старонку лагіна
 }
+
+// Абработчык націску на кнопку "logout"
+const logoutButton = document.getElementById('logout');
+logoutButton.addEventListener('click', logout);

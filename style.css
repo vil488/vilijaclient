@@ -106,3 +106,14 @@ body {
     transform: translate(-50%, -50%) rotate(360deg);
   }
 }
+
+
+/* Стылі для памылак */
+.error-message {
+    font-family: "RobotoMono", monospace;
+    color: #dc0062;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    text-align: center;
+}
+

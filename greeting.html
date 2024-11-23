@@ -13,32 +13,40 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                window.location.href = '/login'; // Вяртаем на старонку ўваходу, калі няма токена
-            }
+    const token = localStorage.getItem('token');
+    if (!token) {
+        window.location.href = '/login'; // Вяртаем на старонку ўваходу, калі няма токена
+        return;
+    }
 
-            const username = 'User'; // Тут трэба будзе ўставіць імя карыстальніка
-            const greetingText = `${username} вітаем у Vilija`;
-            const greetingElement = document.querySelector('.greeting-text');
+    // Атрыманне імя карыстальніка з localStorage
+    const username = localStorage.getItem('username');
+    if (!username) {
+        alert('Імя карыстальніка не знойдзена!');
+        return;
+    }
 
-            // Стварэнне эфекту друкавання
-            let i = 0;
-            const speed = 100; // хуткасць друкавання
-            function typeWriter() {
-                if (i < greetingText.length) {
-                    greetingElement.innerHTML += greetingText.charAt(i);
-                    i++;
-                    setTimeout(typeWriter, speed);
-                } else {
-                    // Пасля завершэння анімацыі правяраем токен і перанакіроўваем
-                    setTimeout(() => {
-                        window.location.href = '/chat'; // Напрамак на чат
-                    }, 5000); // 1500 мс затрымка пасля анімацыі
-                }
-            }
-            typeWriter();
-        });
+    const greetingText = `${username} вітаем у Vilija`;
+    const greetingElement = document.querySelector('.greeting-text');
+
+    // Стварэнне эфекту друкавання
+    let i = 0;
+    const speed = 100; // хуткасць друкавання
+    function typeWriter() {
+        if (i < greetingText.length) {
+            greetingElement.innerHTML += greetingText.charAt(i);
+            i++;
+            setTimeout(typeWriter, speed);
+        } else {
+            // Пасля завершэння анімацыі правяраем токен і перанакіроўваем
+            setTimeout(() => {
+                window.location.href = '/chat'; // Напрамок на чат
+            }, 500); // 1500 мс затрымка пасля анімацыі
+        }
+    }
+    typeWriter();
+});
+
     </script>
 </body>
 </html>

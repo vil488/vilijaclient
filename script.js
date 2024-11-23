@@ -5,6 +5,8 @@ document.querySelector('.login-button').addEventListener('click', function () {
   const username = document.querySelector('input[type="text"]').value;
   const password = document.querySelector('input[type="password"]').value;
 
+  const errorMessageElement = document.getElementById('error-message');
+
   if (!username || !password) {
     alert('Калі ласка, увядзіце лагін і пароль!');
     return;
@@ -32,6 +34,7 @@ document.querySelector('.login-button').addEventListener('click', function () {
     .then(data => {
       if (data.token) {
         localStorage.setItem('token', data.token);
+        localStorage.setItem('username', username); 
         // alert('Вітаем, ' + username + '!');
         window.location.href = '/greeting';
       } else {
@@ -39,8 +42,10 @@ document.querySelector('.login-button').addEventListener('click', function () {
       }
     })
     .catch(error => {
-      console.error('Памылка:', error);
-      alert(error.message);
+      console.error("Памылка злучэння:", error);
+      errorMessageElement.textContent = error.message;
+      errorMessageElement.style.display = 'block'; // Паказваем памылку
+    
     })
     .finally(() => {
       // Хаваем спінер і вяртаем кнопку ў звычайны стан

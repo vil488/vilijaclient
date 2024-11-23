@@ -17,13 +17,14 @@ document.querySelector('.login-button').addEventListener('click', function () {
   spinner.style.display = 'block'; // Паказваем спінер
   button.disabled = true; // Блакуем кнопку
 
+  
   // Запыт на сервер
   fetch('https://vilija.onrender.com/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ username, password, color }),
+    body: JSON.stringify({ username, password }),
   })
     .then(response => {
       if (!response.ok) {

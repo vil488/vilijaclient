@@ -15,13 +15,60 @@ socket.on('connect', () => {
     console.log('Падключана да WebSocket сервера!');
 });
 
+// Абнаўленне спісу паведамленняў пры загрузцы гісторыі
+socket.on('chat history', (messages) => {
+    const messagesContainer = document.getElementById('chatMessages');
+    messagesContainer.innerHTML = ''; // Ачышчаем кантэйнер, калі ёсць старыя дадзеныя
+
+    messages.forEach((message) => {
+        const messageElement = document.createElement('div');
+        messageElement.className = 'chat-message';
+
+        const usernameElement = document.createElement('div');
+        usernameElement.className = 'chat-message-username';
+        usernameElement.textContent = message.sender;
+
+        const textElement = document.createElement('div');
+        textElement.textContent = message.text;
+
+        messageElement.appendChild(usernameElement);
+        messageElement.appendChild(textElement);
+        messagesContainer.appendChild(messageElement);
+    });
+
+    // Пракрутка ўніз пасля дадання ўсіх паведамленняў
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+});
+
+// Абнаўленне спісу паведамленняў пры новых паведамленнях
+socket.on('message', (message) => {
+    const messagesContainer = document.getElementById('chatMessages');
+
+    // Стварыць элементы для паведамлення
+    const messageElement = document.createElement('div');
+    messageElement.className = 'chat-message';
+
+    const usernameElement = document.createElement('div');
+    usernameElement.className = 'chat-message-username';
+    usernameElement.textContent = message.sender;
+
+    const textElement = document.createElement('div');
+    textElement.textContent = message.text;
+
+    messageElement.appendChild(usernameElement);
+    messageElement.appendChild(textElement);
+    messagesContainer.appendChild(messageElement);
+
+    // Пракрутка ўніз
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+});
+
 // Функцыя для адпраўкі паведамлення
 function sendMessage() {
     const input = document.getElementById('chatInput');
-    
+
     if (input.value.trim() !== '') {
         socket.emit('message', {
-            sender: 'Карыстальнік 1', // Тут можна ўставіць рэальнае імя карыстальніка
             text: input.value.trim(),
         });
 
@@ -29,38 +76,11 @@ function sendMessage() {
     }
 }
 
-
-
-
-// Абнаўленне спісу паведамленняў пры падключэнні
-socket.on('message', (message) => {
-    const messages = document.getElementById('chatMessages');
-    
-    // Стварыць элементы для паведамлення
-    const messageElement = document.createElement('div');
-    messageElement.className = 'chat-message';
-
-    const usernameElement = document.createElement('div');
-    usernameElement.className = 'chat-message-username';
-    usernameElement.textContent = message.sender; // Адлюстроўваем імя адпраўніка
-
-    const textElement = document.createElement('div');
-    textElement.textContent = message.text;
-
-    // Дадаць элементы ў паведамленне
-    messageElement.appendChild(usernameElement);
-    messageElement.appendChild(textElement);
-    messages.appendChild(messageElement);
-    
-    // Пракрутка ўніз
-    messages.scrollTop = messages.scrollHeight;
-});
-
 // Абработчык для кнопкі тэмы
 document.getElementById('theme').addEventListener('click', function () {
     // Змяняем клас тэмы ў body
     document.body.classList.toggle('light-theme');
-    
+
     // Захоўваем стан тэмы ў LocalStorage
     const currentTheme = document.body.classList.contains('light-theme') ? 'light' : 'dark';
     localStorage.setItem('theme', currentTheme);
@@ -79,7 +99,7 @@ function logout() {
     // Выдаляем токен з localStorage
     localStorage.removeItem('token');
     // Перанакіроўваем на старонку лагіна
-    window.location.href = 'index.html'; // Замяніце на старонку лагіна
+    window.location.href = 'index.html';
 }
 
 // Абработчык націску на кнопку "logout"

@@ -11,41 +11,22 @@ const socket = io('https://vilija.onrender.com', {
     },
 });
 
-io.on('connection', (socket) => {
-    console.log(`User connected: ${socket.user.username}`);
+// Падключэнне да сервера
+socket.on('connect', () => {
+    console.log('Successfully connected to the server');
   
-    // Адпраўляем гісторыю чата з колерам
+    // Абнаўленне гісторыі чата
     const chatHistory = getChatMessages();
     chatHistory.forEach(message => {
-      message.color = message.color || '#FFFFFF'; // Па змоўчанні белы калер
+        message.color = message.color || '#FFFFFF'; // Па змоўчанні белы колер
     });
     socket.emit('chat history', chatHistory);
-  
-    socket.on('message', (data) => {
-      const message = {
-        sender: socket.user.username,
-        text: data.text,
-        color: socket.user.color,  // Дадаем колер карыстальніка да паведамлення
-        timestamp: new Date().toISOString(),
-      };
-  
-      const messages = getChatMessages();
-      messages.push(message);
-      saveChatMessages(messages);
-  
-      io.emit('message', message); // Рассылаем паведамленне ўсім падключаным
-    });
-  
-    socket.on('disconnect', () => {
-      console.log(`User disconnected: ${socket.user.username}`);
-    });
-  });
-  
+});
 
 // Абнаўленне спісу паведамленняў пры загрузцы гісторыі
 socket.on('chat history', (messages) => {
     const messagesContainer = document.getElementById('chatMessages');
-    messagesContainer.innerHTML = ''; // Ачышчаем кантэйнер, калі ёсць старыя дадзеныя
+    messagesContainer.innerHTML = ''; // Ачышчаем кантэйнер
 
     messages.forEach((message) => {
         const messageElement = document.createElement('div');
@@ -53,7 +34,7 @@ socket.on('chat history', (messages) => {
 
         const usernameElement = document.createElement('div');
         usernameElement.className = 'chat-message-username';
-        usernameElement.style.color = message.senderColor; // Колер карыстальніка
+        usernameElement.style.color = message.senderColor || '#FFFFFF'; // Колер карыстальніка
         usernameElement.textContent = message.sender;
 
         const textElement = document.createElement('div');
@@ -91,27 +72,26 @@ socket.on('message', (message) => {
   
     // Пракрутка ўніз
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
-  });
-  
+});
 
 
-// Функцыя для адпраўкі паведамлення
+
 // Функцыя для адпраўкі паведамлення
 function sendMessage() {
     const input = document.getElementById('chatInput');
 
     if (input.value.trim() !== '') {
-        const color = localStorage.getItem('color') || '#FFFFFF';
+        // Атрымаць колер карыстальніка з localStorage, калі ён там ёсць
+        const color = localStorage.getItem('color') || '#FFFFFF'; // Калі колер не знойдзены, усталёўваецца па змаўчанні белы
 
         socket.emit('message', {
             text: input.value.trim(),
-            color: color  // Выкарыстоўвайце 'color', каб адпавядаць серверу
+            senderColor: color // Дадаць колер у паведамленне
         });
 
         input.value = ''; // Ачышчэнне поля ўводу
     }
 }
-
 
 // Абработчык для кнопкі тэмы
 document.getElementById('theme').addEventListener('click', function () {

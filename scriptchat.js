@@ -26,6 +26,7 @@ socket.on('chat history', (messages) => {
 
         const usernameElement = document.createElement('div');
         usernameElement.className = 'chat-message-username';
+        usernameElement.style.color = message.senderColor; // Колер карыстальніка
         usernameElement.textContent = message.sender;
 
         const textElement = document.createElement('div');
@@ -50,6 +51,7 @@ socket.on('message', (message) => {
 
     const usernameElement = document.createElement('div');
     usernameElement.className = 'chat-message-username';
+    usernameElement.style.color = message.senderColor; // Колер карыстальніка
     usernameElement.textContent = message.sender;
 
     const textElement = document.createElement('div');
@@ -68,8 +70,12 @@ function sendMessage() {
     const input = document.getElementById('chatInput');
 
     if (input.value.trim() !== '') {
+        // Атрымаць колер карыстальніка з localStorage, калі ён там ёсць
+        const color = localStorage.getItem('color') || '#FFFFFF'; // Калі колер не знойдзены, усталёўваецца па змаўчанні белы
+
         socket.emit('message', {
             text: input.value.trim(),
+            senderColor: color // Дадаць колер у паведамленне
         });
 
         input.value = ''; // Ачышчэнне поля ўводу
@@ -105,3 +111,24 @@ function logout() {
 // Абработчык націску на кнопку "logout"
 const logoutButton = document.getElementById('logout');
 logoutButton.addEventListener('click', logout);
+
+// Абработчык націску на кнопку "очысціць чат"
+document.getElementById('cleenchat').addEventListener('click', function () {
+    fetch('https://vilija.onrender.com/clearMessages', {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log('Чат ачышчаны');
+            } else {
+                console.log('Немагчыма ачысціць чат');
+            }
+        })
+        .catch(error => {
+            console.error('Памылка:', error);
+        });
+});

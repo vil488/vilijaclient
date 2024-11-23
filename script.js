@@ -23,7 +23,7 @@ document.querySelector('.login-button').addEventListener('click', function () {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ username, password }),
+    body: JSON.stringify({ username, password, color }),
   })
     .then(response => {
       if (!response.ok) {
@@ -34,7 +34,8 @@ document.querySelector('.login-button').addEventListener('click', function () {
     .then(data => {
       if (data.token) {
         localStorage.setItem('token', data.token);
-        localStorage.setItem('username', username); 
+        localStorage.setItem('username', data.username);
+        localStorage.setItem('color', data.color);
         // alert('Вітаем, ' + username + '!');
         window.location.href = '/greeting';
       } else {
@@ -55,6 +56,8 @@ document.querySelector('.login-button').addEventListener('click', function () {
     });
 });
 
+
+
 // Праверка сесіі пры загрузцы старонкі
 document.addEventListener('DOMContentLoaded', function () {
   const token = localStorage.getItem('token');
@@ -63,4 +66,6 @@ document.addEventListener('DOMContentLoaded', function () {
     window.location.href = '/greeting';
   }
 });
+
+
 

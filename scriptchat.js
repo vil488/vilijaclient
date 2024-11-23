@@ -11,9 +11,36 @@ const socket = io('https://vilija.onrender.com', {
     },
 });
 
-socket.on('connect', () => {
-    console.log('Падключана да WebSocket сервера!');
-});
+io.on('connection', (socket) => {
+    console.log(`User connected: ${socket.user.username}`);
+  
+    // Адпраўляем гісторыю чата з колерам
+    const chatHistory = getChatMessages();
+    chatHistory.forEach(message => {
+      message.color = message.color || '#FFFFFF'; // Па змоўчанні белы калер
+    });
+    socket.emit('chat history', chatHistory);
+  
+    socket.on('message', (data) => {
+      const message = {
+        sender: socket.user.username,
+        text: data.text,
+        color: socket.user.color,  // Дадаем колер карыстальніка да паведамлення
+        timestamp: new Date().toISOString(),
+      };
+  
+      const messages = getChatMessages();
+      messages.push(message);
+      saveChatMessages(messages);
+  
+      io.emit('message', message); // Рассылаем паведамленне ўсім падключаным
+    });
+  
+    socket.on('disconnect', () => {
+      console.log(`User disconnected: ${socket.user.username}`);
+    });
+  });
+  
 
 // Абнаўленне спісу паведамленняў пры загрузцы гісторыі
 socket.on('chat history', (messages) => {
@@ -44,43 +71,47 @@ socket.on('chat history', (messages) => {
 // Абнаўленне спісу паведамленняў пры новых паведамленнях
 socket.on('message', (message) => {
     const messagesContainer = document.getElementById('chatMessages');
-
-    // Стварыць элементы для паведамлення
+  
     const messageElement = document.createElement('div');
     messageElement.className = 'chat-message';
-
+  
     const usernameElement = document.createElement('div');
     usernameElement.className = 'chat-message-username';
-    usernameElement.style.color = message.senderColor; // Колер карыстальніка
     usernameElement.textContent = message.sender;
-
+  
+    // Задаем колер для імя карыстальніка
+    usernameElement.style.color = message.color;  // Адпраўляемы калер у кожным паведамленні
+  
     const textElement = document.createElement('div');
     textElement.textContent = message.text;
-
+  
     messageElement.appendChild(usernameElement);
     messageElement.appendChild(textElement);
     messagesContainer.appendChild(messageElement);
-
+  
     // Пракрутка ўніз
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
-});
+  });
+  
 
+
+// Функцыя для адпраўкі паведамлення
 // Функцыя для адпраўкі паведамлення
 function sendMessage() {
     const input = document.getElementById('chatInput');
 
     if (input.value.trim() !== '') {
-        // Атрымаць колер карыстальніка з localStorage, калі ён там ёсць
-        const color = localStorage.getItem('color') || '#FFFFFF'; // Калі колер не знойдзены, усталёўваецца па змаўчанні белы
+        const color = localStorage.getItem('color') || '#FFFFFF';
 
         socket.emit('message', {
             text: input.value.trim(),
-            senderColor: color // Дадаць колер у паведамленне
+            color: color  // Выкарыстоўвайце 'color', каб адпавядаць серверу
         });
 
         input.value = ''; // Ачышчэнне поля ўводу
     }
 }
+
 
 // Абработчык для кнопкі тэмы
 document.getElementById('theme').addEventListener('click', function () {

@@ -85,16 +85,19 @@ body:not(.light-theme) .icon-bar button svg {
     margin-left: 10px;
     padding: 10px 20px;
     border: none;
-    background: #4CAF50;
-    color: white;
+    background: transparent;
+    color: currentColor;
     border-radius: 0px;
+    border: 1.5px solid currentColor;
     cursor: pointer;
     font-size: 14px;
     font-family: 'RobotoMono', monospace;
+    transition: background 0.3s ease;
 }
 
 .chat-input button:hover {
-    background: #45a049;
+    background: #dc0062;
+    transition: background 0.3s ease;
 }
 
 /* Скролбар для паведамленняў */
@@ -160,9 +163,16 @@ body:not(.light-theme) .icon-bar button svg {
 }
 
 
-.icon-bar button:hover svg {
-    fill: #4CAF50; /* Зялёны колер пры навядзенні */
+/* Змены для іконкі пры навядзенні */
+body.light-theme .icon-bar button:hover svg {
+    fill: #dc0062; /* Зялёны колер пры навядзенні */
 }
+
+body:not(.light-theme) .icon-bar button:hover svg {
+    fill: #dc0062; /* Колер для цёмнай тэмы пры навядзенні */
+}
+
+
 
 .chat-message {
     padding: 10px;
@@ -180,3 +190,42 @@ body:not(.light-theme) .icon-bar button svg {
     margin-bottom: 5px;
     color: currentColor; /* Колер будзе залежаць ад тэмы */
 }
+
+
+button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    border: 1.5px solid currentColor;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-family: 'RobotoMono', monospace;
+  }
+  
+  button svg {
+    width: 24px;
+    height: 24px;
+    fill: currentColor; /* Іконка выкарыстоўвае currentColor для адаптацыі колеру */
+    transition: fill 0.3s ease;
+  }
+  
+  /* Змены колеру для светлай тэмы */
+  body.light-theme button svg {
+    fill: black; /* Іконка чорная ў светлай тэме */
+  }
+  
+  body.light-theme button:hover svg {
+    fill: whitesmoke; /* Іконка зялёная пры навядзенні */
+  }
+  
+  /* Змены колеру для цёмнай тэмы */
+  body:not(.light-theme) button svg {
+    fill: whitesmoke; /* Іконка белая ў цёмнай тэме */
+  }
+  
+  body:not(.light-theme) button:hover svg {
+    fill: whitesmoke; /* Іконка зялёная пры навядзенні */
+  }
+  

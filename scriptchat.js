@@ -69,7 +69,7 @@ const logoutButton = document.getElementById('logout');  // Паказваем �
 
 logoutButton.addEventListener('click', logout);  // Дадаем абработчык падзеі націску
 
-// Функцыя для выхаду
+// // Функцыя для выхаду
 function logout() {
     // Выдаляем токен з localStorage
     localStorage.removeItem('token'); // Замяніце 'token' на імя вашага токена

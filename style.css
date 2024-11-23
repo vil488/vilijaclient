@@ -1,3 +1,10 @@
+@font-face {
+    font-family: 'RobotoMono';
+    src: url('assets/RobotoMono-VariableFont_wght.ttf') format('truetype');
+    font-weight: 100 900; /* Калі шрыфт падтрымлівае дыяпазон вагі */
+    font-style: normal; /* Дадаць italic, калі патрэбна */
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -6,7 +13,7 @@ body {
     align-items: center;
     height: 100vh;
     background-color: black;
-    font-family: Arial, sans-serif;
+    font-family: 'RobotoMono', monospace;
 }
 
 .login-container {
@@ -18,6 +25,7 @@ body {
     text-align: center;
     flex-direction: column;
     align-items: center;
+    font-family: 'RobotoMono', monospace;
 }
 
 .input-field {
@@ -30,6 +38,7 @@ body {
     border-radius: 0px;
     font-size: 16px;
     color: whitesmoke;
+    font-family: 'RobotoMono', monospace;
     
 }
 
@@ -42,10 +51,11 @@ body {
     border-radius: 0 ;
     font-size: 16px;
     cursor: pointer;
+    font-family: 'RobotoMono', monospace;
 }
 
 .login-button:hover {
-    background-color: maroon;
+    background-color: #dc0062;
     color: whitesmoke;
 }
 

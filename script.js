@@ -32,7 +32,7 @@ document.querySelector('.login-button').addEventListener('click', function () {
     .then(data => {
       if (data.token) {
         localStorage.setItem('token', data.token);
-        alert('Вітаем, ' + username + '!');
+        // alert('Вітаем, ' + username + '!');
         window.location.href = '/greeting';
       } else {
         throw new Error('Не атрымалі токен ад сервера');

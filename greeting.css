@@ -9,7 +9,7 @@
     src: url("assets/RobotoMono-VariableFont_wght.ttf") format("truetype");
     font-weight: 100 900; /* Калі шрыфт падтрымлівае дыяпазон вагі */
     font-style: normal; /* Дадаць italic, калі патрэбна */
-  }
+}
 
 body {
     font-family: "RobotoMono", monospace;
@@ -24,6 +24,7 @@ body {
 
 .welcome-container {
     text-align: center;
+    padding: 0 20px; /* Дадаем пэдынг для мабільных экранаў */
 }
 
 .greeting-text {
@@ -39,3 +40,18 @@ body {
         border-color: transparent;
     }
 }
+
+/* Мабільная версія */
+@media (max-width: 768px) {
+    .greeting-text {
+        font-size: 2rem; /* Меншы памер тэксту для мабільных */
+    }
+}
+
+/* Дадатковыя налады для экранаў менш за 480px */
+@media (max-width: 480px) {
+    .greeting-text {
+        font-size: 1.5rem; /* яшчэ меншы памер для маленькіх экранаў */
+    }
+}
+

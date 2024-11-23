@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="be">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vilija</title>
+    <link rel="stylesheet" href="greeting.css">
+</head>
+<body>
+    <div class="welcome-container">
+        <h1 class="greeting-text"></h1>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = '/login'; // Вяртаем на старонку ўваходу, калі няма токена
+            }
+
+            const username = 'User'; // Тут трэба будзе ўставіць імя карыстальніка
+            const greetingText = `${username} вітаем у Vilija`;
+            const greetingElement = document.querySelector('.greeting-text');
+
+            // Стварэнне эфекту друкавання
+            let i = 0;
+            const speed = 100; // хуткасць друкавання
+            function typeWriter() {
+                if (i < greetingText.length) {
+                    greetingElement.innerHTML += greetingText.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, speed);
+                } else {
+                    // Пасля завяршэння анімацыі правяраем токен і перанакіроўваем
+                    setTimeout(() => {
+                        window.location.href = '/chat'; // Напрамак на чат
+                    }, 500); // 500 мс затрымка для плавнасці пераходу
+                }
+            }
+            typeWriter();
+        });
+    </script>
+</body>
+</html>
+

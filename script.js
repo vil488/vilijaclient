@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const token = localStorage.getItem('token');
   if (token) {
     alert('Вы ўжо аўтарызаваны!');
-    window.location.href = '/chat';
+    window.location.href = '/greeting';
   }
 });
 

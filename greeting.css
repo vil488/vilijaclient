@@ -1,0 +1,41 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+@font-face {
+    font-family: "RobotoMono";
+    src: url("assets/RobotoMono-VariableFont_wght.ttf") format("truetype");
+    font-weight: 100 900; /* Калі шрыфт падтрымлівае дыяпазон вагі */
+    font-style: normal; /* Дадаць italic, калі патрэбна */
+  }
+
+body {
+    font-family: "RobotoMono", monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: black;
+    color: white;
+    overflow: hidden;
+}
+
+.welcome-container {
+    text-align: center;
+}
+
+.greeting-text {
+    font-size: 3rem;
+    border-right: 0.1em solid white; /* Эфект курсора */
+    white-space: nowrap; /* Не пераносіць тэкст */
+    overflow: hidden; /* Схавае лішні тэкст да з'яўлення */
+    display: inline-block;
+}
+
+@keyframes blink {
+    50% {
+        border-color: transparent;
+    }
+}

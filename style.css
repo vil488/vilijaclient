@@ -64,3 +64,28 @@ body {
     color: whitesmoke; /* Колер placeholder */
      /* Неабавязкова, для стылю */
 }
+
+
+/* Spinner Style */
+.loading-spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid #ffffff;
+    border-top: 3px solid #dc0062; /* Кантрасны колер для верхняга краю */
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite; /* Пастаяннае кручэнне */
+    display: none; /* Па змаўчанні схаваны */
+    margin-left: 10px; /* Адступ для спінера ў кнопцы */
+  }
+  
+  /* Анімацыя кручэння */
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  

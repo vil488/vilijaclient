@@ -1,91 +1,108 @@
 @font-face {
-    font-family: 'RobotoMono';
-    src: url('assets/RobotoMono-VariableFont_wght.ttf') format('truetype');
-    font-weight: 100 900; /* Калі шрыфт падтрымлівае дыяпазон вагі */
-    font-style: normal; /* Дадаць italic, калі патрэбна */
+  font-family: "RobotoMono";
+  src: url("assets/RobotoMono-VariableFont_wght.ttf") format("truetype");
+  font-weight: 100 900; /* Калі шрыфт падтрымлівае дыяпазон вагі */
+  font-style: normal; /* Дадаць italic, калі патрэбна */
 }
 
 body {
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: black;
-    font-family: 'RobotoMono', monospace;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: black;
+  font-family: "RobotoMono", monospace;
 }
 
 .login-container {
-    display: flex
-;
-    background-color: transparent;
-    padding: 20px;
-    width: 300px;
-    text-align: center;
-    flex-direction: column;
-    align-items: center;
-    font-family: 'RobotoMono', monospace;
+  display: flex;
+  background-color: transparent;
+  padding: 20px;
+  width: 300px;
+  text-align: center;
+  flex-direction: column;
+  align-items: center;
+  font-family: "RobotoMono", monospace;
 }
 
 .input-field {
-    background-color: black;
-    outline: none;
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid whitesmoke;
-    border-radius: 0px;
-    font-size: 16px;
-    color: whitesmoke;
-    font-family: 'RobotoMono', monospace;
-    
+  background-color: black;
+  outline: none;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid whitesmoke;
+  border-radius: 0px;
+  font-size: 16px;
+  color: whitesmoke;
+  font-family: "RobotoMono", monospace;
 }
 
 .login-button {
-    width: 100px;
-    padding: 10px;
-    background-color: whitesmoke;
-    color: black;
-    border: none;
-    border-radius: 0 ;
-    font-size: 16px;
-    cursor: pointer;
-    font-family: 'RobotoMono', monospace;
+  width: 100px;
+  padding: 10px;
+  background-color: whitesmoke;
+  color: black;
+  border: none;
+  border-radius: 0;
+  font-size: 16px;
+  cursor: pointer;
+  font-family: "RobotoMono", monospace;
 }
 
 .login-button:hover {
-    background-color: #dc0062;
-    color: whitesmoke;
+  background-color: #dc0062;
+  color: whitesmoke;
 }
-
 
 .input-field::placeholder {
-    color: whitesmoke; /* Колер placeholder */
-     /* Неабавязкова, для стылю */
+  color: whitesmoke; /* Колер placeholder */
+  /* Неабавязкова, для стылю */
 }
 
+/* Асноўны стыль кнопкі */
+.login-button {
+  width: 100px;
+  padding: 10px;
+  background-color: whitesmoke;
+  color: black;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  font-family: "RobotoMono", monospace;
+  position: relative; /* Для абсалютнага пазіцыянавання спінера */
+  overflow: hidden; /* Каб тэкст не выходзіў за межы */
+}
 
-/* Spinner Style */
+/* Кнопка пры загрузцы (змяняецца колер) */
+.login-button.loading {
+  background-color: transparent;
+  color: transparent; /* Робіць тэкст невідочным */
+}
+
+/* Стыль для спінера */
 .loading-spinner {
-    width: 20px;
-    height: 20px;
-    border: 3px solid #ffffff;
-    border-top: 3px solid #dc0062; /* Кантрасны колер для верхняга краю */
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite; /* Пастаяннае кручэнне */
-    display: none; /* Па змаўчанні схаваны */
-    margin-left: 10px; /* Адступ для спінера ў кнопцы */
+  width: 20px;
+  height: 20px;
+  border: 3px solid #ffffff;
+  border-top: 3px solid #dc0062;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Цэнтраванне ўнутры кнопкі */
+}
+
+/* Анімацыя кручэння */
+@keyframes spin {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
   }
-  
-  /* Анімацыя кручэння */
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
   }
-  
-  
+}

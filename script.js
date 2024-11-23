@@ -10,9 +10,10 @@ document.querySelector('.login-button').addEventListener('click', function () {
     return;
   }
 
-  // Паказваем спінер і блакуем кнопку
-  spinner.style.display = 'inline-block'; // Паказваем анімацыю
-  button.disabled = true;
+  // Паказваем спінер, змяняем колер кнопкі і блакуем яе
+  button.classList.add('loading'); // Дадаем клас для празрыстасці
+  spinner.style.display = 'block'; // Паказваем спінер
+  button.disabled = true; // Блакуем кнопку
 
   // Запыт на сервер
   fetch('https://vilija.onrender.com/login', {
@@ -42,9 +43,10 @@ document.querySelector('.login-button').addEventListener('click', function () {
       alert(error.message);
     })
     .finally(() => {
-      // Хаваем спінер і адключаем блакаванне кнопкі
-      spinner.style.display = 'none';
-      button.disabled = false;
+      // Хаваем спінер і вяртаем кнопку ў звычайны стан
+      button.classList.remove('loading'); // Здымаем празрысты клас
+      spinner.style.display = 'none'; // Хаваем спінер
+      button.disabled = false; // Актывуем кнопку
     });
 });
 
@@ -56,3 +58,4 @@ document.addEventListener('DOMContentLoaded', function () {
     window.location.href = '/chat';
   }
 });
+

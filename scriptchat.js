@@ -48,7 +48,7 @@ socket.on('chat history', (messages) => {
         usernameElement.textContent = message.sender;
 
         const textElement = document.createElement('div');
-        textElement.textContent = message.text;
+        textElement.innerHTML = message.text.replace(/\n/g, '<br>');
 
         const timeElement = document.createElement('div');
         timeElement.className = 'chat-message-time';

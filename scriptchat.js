@@ -80,7 +80,7 @@ socket.on('message', (message) => {
     usernameElement.style.color = message.color;  // Адпраўляемы калер у кожным паведамленні
   
     const textElement = document.createElement('div');
-    textElement.innerHTML = message.text; 
+    textElement.innerHTML = message.text.replace(/\n/g, '<br>');
   
     const timeElement = document.createElement('div');
     timeElement.className = 'chat-message-time';
@@ -103,21 +103,18 @@ function sendMessage() {
     const input = document.getElementById('chatInput');
 
     if (input.value.trim() !== '') {
-        // Атрымаць колер карыстальніка з localStorage, калі ён там ёсць
         const color = localStorage.getItem('color') || '#FFFFFF';
-        
-        // Форматаванне паведамлення, каб замяніць пераводы радкоў на <br>
-        const formattedMessage = input.value.replace(/\n/g, '<br>'); 
 
-        // Адпраўляем паведамленне з колерам
+        // Адпраўляем паведамленне з \n (без замены на <br>)
         socket.emit('message', {
-            text: formattedMessage,
-            senderColor: color // Дадаць колер у паведамленне
+            text: input.value.trim(),
+            senderColor: color
         });
 
         input.value = ''; // Ачышчэнне поля ўводу
     }
 }
+
 
 
 // Абработчык для кнопкі тэмы

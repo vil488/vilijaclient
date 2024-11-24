@@ -175,8 +175,14 @@ body:not(.light-theme) .icon-bar button svg {
 .chat-message-username {
     font-weight: bold;
     font-size: x-small;
-    margin-bottom: 5px;
+    margin-bottom: 1px;
     color: currentColor; /* Колер будзе залежаць ад тэмы */
+}
+
+.chat-message-time{
+    font-size: x-small;
+    margin-top: 3px;
+    color: gray;
 }
 
 

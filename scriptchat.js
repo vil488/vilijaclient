@@ -23,6 +23,16 @@ socket.on('connect', () => {
     socket.emit('chat history', chatHistory);
 });
 
+// Функцыя для фарматавання часу (гадзіна і хвіліна)
+function formatTime(dateString) {
+    const options = {
+        hour: '2-digit',
+        minute: '2-digit',
+    };
+    const date = new Date(dateString); // Пераўтворыце timestamp у аб'ект Date
+    return new Intl.DateTimeFormat('en-GB', options).format(date); // Вяртае гадзіну і хвіліну
+}
+
 // Абнаўленне спісу паведамленняў пры загрузцы гісторыі
 socket.on('chat history', (messages) => {
     const messagesContainer = document.getElementById('chatMessages');
@@ -34,14 +44,19 @@ socket.on('chat history', (messages) => {
 
         const usernameElement = document.createElement('div');
         usernameElement.className = 'chat-message-username';
-        usernameElement.style.color = message.senderColor || '#FFFFFF'; // Колер карыстальніка
+        usernameElement.style.color = message.color || '#FFFFFF'; // Колер карыстальніка
         usernameElement.textContent = message.sender;
 
         const textElement = document.createElement('div');
         textElement.textContent = message.text;
 
+        const timeElement = document.createElement('div');
+        timeElement.className = 'chat-message-time';
+        timeElement.textContent = formatTime(message.timestamp);  // Фарматуем час толькі для гадзін і хвілін
+
         messageElement.appendChild(usernameElement);
         messageElement.appendChild(textElement);
+        messageElement.appendChild(timeElement); // Дадаем час да паведамлення
         messagesContainer.appendChild(messageElement);
     });
 
@@ -49,6 +64,7 @@ socket.on('chat history', (messages) => {
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
 });
 
+// Абнаўленне спісу паведамленняў пры новых паведамленнях
 // Абнаўленне спісу паведамленняў пры новых паведамленнях
 socket.on('message', (message) => {
     const messagesContainer = document.getElementById('chatMessages');
@@ -66,13 +82,19 @@ socket.on('message', (message) => {
     const textElement = document.createElement('div');
     textElement.textContent = message.text;
   
+    const timeElement = document.createElement('div');
+    timeElement.className = 'chat-message-time';
+    timeElement.textContent = formatTime(message.timestamp); // Фарматуем час для кожнага паведамлення
+
     messageElement.appendChild(usernameElement);
     messageElement.appendChild(textElement);
+    messageElement.appendChild(timeElement); // Дадаем час
     messagesContainer.appendChild(messageElement);
   
     // Пракрутка ўніз
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
 });
+
 
 
 

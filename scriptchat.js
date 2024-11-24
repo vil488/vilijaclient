@@ -157,6 +157,7 @@ document.getElementById('cleenchat').addEventListener('click', function () {
         .then(data => {
             if (data.success) {
                 console.log('Чат ачышчаны');
+                location.reload(true); 
             } else {
                 console.log('Немагчыма ачысціць чат');
             }

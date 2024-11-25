@@ -5,7 +5,7 @@ const articleList = document.querySelector(".article-list");
 // Функцыя для запыту артыкулаў з бэкенда
 async function fetchArticles() {
     try {
-        const response = await fetch('http://localhost:3000/articles'); // Адрас вашага бэкенда
+        const response = await fetch('https://vilija.onrender.com/articles'); // Адрас вашага бэкенда
         if (!response.ok) {
             throw new Error('Не атрымалася загрузіць артыкулы');
         }

@@ -55,14 +55,25 @@ async function closeArticle() {
 }
 
 // Пераключэнне тэмы (цёмная/светлая)
-document.getElementById('theme').addEventListener('click', function toggleTheme() {
-    document.body.classList.toggle("light-theme");
+document.addEventListener('DOMContentLoaded', function () {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+        document.body.classList.add('light-theme');
+    }
 });
+
 
 // Пераход на старонку "чат"
 document.getElementById('info').addEventListener('click', function() {
     window.location.href = '/chat'; // Змяніце шлях на адпаведны
 });
+
+function logout() {
+    // Выдаляем токен з localStorage
+    localStorage.removeItem('token');
+    // Перанакіроўваем на старонку лагіна
+    window.location.href = 'index.html';
+}
 
 // Ініцыялізацыя: загрузіць спіс артыкулаў пры старце
 document.addEventListener("DOMContentLoaded", fetchArticles);

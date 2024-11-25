@@ -54,6 +54,16 @@ async function closeArticle() {
     await fetchArticles(); // Зноў атрымаць спіс артыкулаў
 }
 
+
+document.getElementById('theme').addEventListener('click', function () {
+    // Змяняем клас тэмы ў body
+    document.body.classList.toggle('light-theme');
+
+    // Захоўваем стан тэмы ў LocalStorage
+    const currentTheme = document.body.classList.contains('light-theme') ? 'light' : 'dark';
+    localStorage.setItem('theme', currentTheme);
+});
+
 // Пераключэнне тэмы (цёмная/светлая)
 document.addEventListener('DOMContentLoaded', function () {
     const savedTheme = localStorage.getItem('theme');
@@ -68,12 +78,13 @@ document.getElementById('info').addEventListener('click', function() {
     window.location.href = '/chat'; // Змяніце шлях на адпаведны
 });
 
-function logout() {
+document.getElementById('logout').addEventListener('click', function logout() {
     // Выдаляем токен з localStorage
     localStorage.removeItem('token');
     // Перанакіроўваем на старонку лагіна
     window.location.href = 'index.html';
 }
+)
 
 // Ініцыялізацыя: загрузіць спіс артыкулаў пры старце
 document.addEventListener("DOMContentLoaded", fetchArticles);

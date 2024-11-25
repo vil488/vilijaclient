@@ -66,8 +66,7 @@ body:not(.light-theme) .icon-bar button svg {
     border: 1.5px solid whitesmoke;
     padding: 20px;
     display: block;
-    width: 600px;
-    height: 405px; /* Каб не абмяжоўваць вышыню */
+    height: 405px;
     overflow-y: auto;
     background-color: transparent; /* Вярнуць празрыстасць для article-list */
 }
@@ -99,6 +98,10 @@ body:not(.light-theme) .icon-bar button svg {
     align-items: flex-end;
 }
 
+.article{
+    width: 650px;
+    margin-top: 1%;
+}
 
 /* Змяніць стыль для элемента спісу */
 .article-list-item {
@@ -117,7 +120,8 @@ body:not(.light-theme) .article-list-item {
 
 .div1{
     display: flex;
-    justify-content: space-between;
+        height: 38;
+        justify-content: space-between;
     }
 
 

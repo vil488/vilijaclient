@@ -35,12 +35,13 @@ body:not(.light-theme) .icon-bar button svg {
 
 .chat-container {
     display: flex;
-    flex-direction: column;
-    
-    background: transparent;
-    border: none;
-    overflow: hidden;
-    height: 500px;
+        background: transparent;
+        border: none;
+        overflow: hidden;
+        height: 500px;
+        flex-direction: column;
+        width: 650px;
+        margin-top: 1%;
 }
 
 .chat-messages {
@@ -134,7 +135,8 @@ body:not(.light-theme) .icon-bar button svg {
     align-items: center;
     padding: 0px;
     background-color: transparent;
-     /* Колер мяжы залежыць ад тэмы */
+    
+    width: 38px;
 }
 
 .icon-bar button {

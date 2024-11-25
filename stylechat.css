@@ -36,7 +36,7 @@ body:not(.light-theme) .icon-bar button svg {
 .chat-container {
     display: flex;
     flex-direction: column;
-    width: 600px;
+    
     background: transparent;
     border: none;
     overflow: hidden;
@@ -51,6 +51,7 @@ body:not(.light-theme) .icon-bar button svg {
     overflow-y: auto;
     border: 1.5px solid currentColor; /* Колер мяжы залежыць ад тэмы */
     max-height: 350px;
+    width: 600px;
     background-color: transparent; /* Фон празрысты */
 }
 
@@ -61,6 +62,7 @@ body:not(.light-theme) .icon-bar button svg {
     background: transparent;
     border: 1.5px solid currentColor; /* Колер мяжы залежыць ад тэмы */
     border-radius: 0px;
+    width: 600px;
 }
 
 .chat-input textarea {

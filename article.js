@@ -20,6 +20,11 @@ async function fetchArticles() {
 
 // Функцыя для адлюстравання спісу артыкулаў
 function displayArticles(articles) {
+    if (articles.length > 1) {
+        const firstArticle = articles.shift(); // Вымаем першы элемент
+        articles.splice(1, 0, firstArticle); // Устаўляем яго на другое месца
+    }
+
     articlesContainer.innerHTML = ""; // Ачысціць кантэйнер перад запаўненнем
 
     articles.forEach((article) => {
@@ -30,6 +35,7 @@ function displayArticles(articles) {
         articlesContainer.appendChild(articleItem);
     });
 }
+
 
 // Функцыя для адлюстравання поўнага артыкула
 function openArticle(article) {

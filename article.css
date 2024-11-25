@@ -11,10 +11,11 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-color: black; /* Па змаўчанні цёмная тэма */
+    background-color: black;
     font-family: 'RobotoMono', monospace;
     color: whitesmoke;
     transition: background-color 0.3s ease, color 0.3s ease;
+
 }
 
 /* Светлая тэма */
@@ -53,8 +54,8 @@ body:not(.light-theme) .icon-bar button svg {
 }
 
 .icon-bar button svg {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
     fill: currentColor;
     transition: fill 0.3s ease;
 }

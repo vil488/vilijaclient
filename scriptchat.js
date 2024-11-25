@@ -117,6 +117,7 @@ function sendMessage() {
 
 
 
+
 // Абработчык для кнопкі тэмы
 document.getElementById('theme').addEventListener('click', function () {
     // Змяняем клас тэмы ў body
@@ -167,4 +168,13 @@ document.getElementById('cleenchat').addEventListener('click', function () {
         .catch(error => {
             console.error('Памылка:', error);
         });
+});
+
+
+document.getElementById('info').addEventListener('click', function(){
+    if (localStorage.getItem('token')) {
+        
+        window.location.href = '/article';
+    }    
+    
 });

@@ -38,6 +38,7 @@ body:not(.light-theme) .icon-bar button svg {
     align-items: center;
     padding: 0px;
     background-color: transparent;
+    height: 38px;
 }
 
 .icon-bar button {

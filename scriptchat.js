@@ -37,7 +37,7 @@ function loadHistory() {
             return;
         }
 
-        // Дадаем паведамленні ўверх
+        // Дадаем паведамленні ў верх
         messages.forEach((message) => {
             const messageElement = document.createElement('div');
             messageElement.className = 'chat-message';
@@ -55,7 +55,7 @@ function loadHistory() {
         // Абнаўляем стан загрузкі
         loadingHistory = false;
 
-        // Пракрутка на верх
+        // Пракрутка на верх пасля загрузкі паведамленняў
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
     });
 }
@@ -91,7 +91,7 @@ socket.on('message', (message) => {
     messageElement.appendChild(timeElement); // Дадаем час
     messagesContainer.appendChild(messageElement);
 
-    // Пракрутка ўніз пасля дадавання паведамлення
+    // Пракрутка ўніз пасля дабаўлення паведамлення
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
 });
 
@@ -180,4 +180,3 @@ document.getElementById('info').addEventListener('click', function () {
         window.location.href = '/article';
     }
 });
-

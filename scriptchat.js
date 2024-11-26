@@ -33,36 +33,61 @@ function formatTime(dateString) {
     return new Intl.DateTimeFormat('en-GB', options).format(date); // Вяртае гадзіну і хвіліну
 }
 
+socket.on('load history', async ({ offset }, callback) => {
+    const limit = 20; // Колькасць паведамленняў за раз
+    const messages = await getMessagesFromDB(offset, limit); // Функцыя для загрузкі з базы даных
+    callback(messages);
+});
+
 // Абнаўленне спісу паведамленняў пры загрузцы гісторыі
-socket.on('chat history', (messages) => {
-    const messagesContainer = document.getElementById('chatMessages');
-    messagesContainer.innerHTML = ''; // Ачышчаем кантэйнер
+function loadHistory() {
+    if (loadingHistory) return;
+    loadingHistory = true;
 
-    messages.forEach((message) => {
-        const messageElement = document.createElement('div');
-        messageElement.className = 'chat-message';
+    socket.emit('load history', { offset }, (messages) => {
+        if (messages.length === 0) {
+            loadingHistory = false; // Больш няма дадзеных
+            return;
+        }
 
-        const usernameElement = document.createElement('div');
-        usernameElement.className = 'chat-message-username';
-        usernameElement.style.color = message.color || '#FFFFFF'; // Колер карыстальніка
-        usernameElement.textContent = message.sender;
+        const messagesContainer = document.getElementById('chatMessages');
 
-        const textElement = document.createElement('div');
-        textElement.innerHTML = message.text.replace(/\n/g, '<br>');
+        // Захоўваем цяперашні стан скролу
+        const currentScrollHeight = messagesContainer.scrollHeight;
 
-        const timeElement = document.createElement('div');
-        timeElement.className = 'chat-message-time';
-        timeElement.textContent = formatTime(message.timestamp);  // Фарматуем час толькі для гадзін і хвілін
+        messages.forEach((message) => {
+            const messageElement = document.createElement('div');
+            messageElement.className = 'chat-message';
+            messageElement.innerHTML = `
+                <div class="chat-message-username" style="color: ${message.color || '#FFFFFF'}">${message.sender}</div>
+                <div>${message.text.replace(/\n/g, '<br>')}</div>
+                <div class="chat-message-time">${formatTime(message.timestamp)}</div>
+            `;
+            messagesContainer.appendChild(messageElement);
+        });
 
-        messageElement.appendChild(usernameElement);
-        messageElement.appendChild(textElement);
-        messageElement.appendChild(timeElement); // Дадаем час да паведамлення
-        messagesContainer.appendChild(messageElement);
+        // Аднаўляем становішча скролу
+        messagesContainer.scrollTop = messagesContainer.scrollHeight - currentScrollHeight;
+
+        offset += messages.length; // Павялічваем адступ
+        loadingHistory = false;
     });
+}
+
+
+const messagesContainer = document.getElementById('chatMessages');
+
+messagesContainer.addEventListener('scroll', () => {
+    if (messagesContainer.scrollTop === 0) {
+        loadHistory();
+    }
+});
 
     // Пракрутка ўніз пасля дадання ўсіх паведамленняў
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
-});
+
+
+
 
 // Абнаўленне спісу паведамленняў пры новых паведамленнях
 // Абнаўленне спісу паведамленняў пры новых паведамленнях

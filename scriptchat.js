@@ -33,12 +33,12 @@ function loadHistory() {
 
     socket.emit('load history', { offset }, (messages) => {
         if (messages.length === 0) {
-            loadingHistory = false; // Больш няма дадзеных
+            loadingHistory = false; // No more data
             return;
         }
 
-        // Дадаем паведамленні ў верх
-        messages.forEach((message) => {
+        // Add messages to the bottom
+        messages.reverse().forEach((message) => {
             const messageElement = document.createElement('div');
             messageElement.className = 'chat-message';
             messageElement.innerHTML = `
@@ -46,19 +46,20 @@ function loadHistory() {
                 <div>${message.text.replace(/\n/g, '<br>')}</div>
                 <div class="chat-message-time">${formatTime(message.timestamp)}</div>
             `;
-            messagesContainer.insertBefore(messageElement, messagesContainer.firstChild);
+            messagesContainer.appendChild(messageElement);
         });
 
-        // Абнаўляем offset для будучых запытаў
+        // Update offset for future requests
         offset += messages.length;
 
-        // Абнаўляем стан загрузкі
+        // Update loading state
         loadingHistory = false;
 
-        // Пракрутка на верх пасля загрузкі паведамленняў
+        // Scroll to bottom after loading messages
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
     });
 }
+
 
 // Абслугоўваем падзею скролу
 messagesContainer.addEventListener('scroll', () => {

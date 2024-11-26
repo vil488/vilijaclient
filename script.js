@@ -4,26 +4,31 @@ document.querySelector('.login-button').addEventListener('click', function () {
 
   const username = document.querySelector('input[type="text"]').value;
   const password = document.querySelector('input[type="password"]').value;
+  
 
   const errorMessageElement = document.getElementById('error-message');
 
-  usernameInput.focus();
+    // Усталёўваем фокус на поле для імя пры загрузцы
+    username.focus();
 
-  usernameInput.addEventListener("input", () => {
-    usernameInput.value = usernameInput.value.charAt(0).toUpperCase() + usernameInput.value.slice(1);
-  });
-
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Enter") {
-      if (document.activeElement === usernameInput) {
-        // Пераход на поле паролю
-        passwordInput.focus();
-      } else if (document.activeElement === passwordInput) {
-        // Клік па кнопцы логіна
-        loginButton.click();
+    // Дадаем слухача для аўтаматычнай вялікай літары
+    usernameInput.addEventListener("input", () => {
+      const value = username.value;
+      username.value = value.charAt(0).toUpperCase() + value.slice(1);
+    });
+  
+    // Слухач для націску клавішы Enter
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        if (document.activeElement === username) {
+          // Пераход да поля пароля
+          passwordInput.focus();
+        } else if (document.activeElement === password) {
+          // Эмуляцыя націску кнопкі логіна
+          button.click();
+        }
       }
-    }
-  });
+    });
 
   if (!username || !password) {
     errorMessageElement.textContent = 'Калі ласка, увядзіце лагін і пароль!';

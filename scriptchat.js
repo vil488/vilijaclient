@@ -1,9 +1,3 @@
-// Праверка наяўнасці токена ў localStorage
-if (!localStorage.getItem('token')) {
-    // Калі токен не знойдзены, перанакіроўваем на старонку лагіна
-    window.location.href = 'index.html';
-}
-
 // Ініцыялізуем падключэнне WebSocket пасля таго, як скрыпт socket.io загружаны
 const socket = io('https://vilija.onrender.com', {
     auth: {
@@ -14,9 +8,12 @@ const socket = io('https://vilija.onrender.com', {
 let offset = 0;
 let loadingHistory = false;
 
+const messagesContainer = document.getElementById('chatMessages');
+
 // Падключэнне да сервера
 socket.on('connect', () => {
     console.log('Successfully connected to the server');
+    loadHistory();  // Загружаем гісторыю пасля падключэння
 });
 
 // Функцыя для фарматавання часу (гадзіна і хвіліна)
@@ -40,12 +37,7 @@ function loadHistory() {
             return;
         }
 
-        const messagesContainer = document.getElementById('chatMessages');
-
-        // Захоўваем цяперашні стан скролу
-        const currentScrollHeight = messagesContainer.scrollHeight;
-
-        // Дадаем старое паведамленне ўверх
+        // Дадаем паведамленні ўверх
         messages.forEach((message) => {
             const messageElement = document.createElement('div');
             messageElement.className = 'chat-message';
@@ -57,33 +49,26 @@ function loadHistory() {
             messagesContainer.insertBefore(messageElement, messagesContainer.firstChild);
         });
 
-        // Аднаўляем становішча скролу
-        messagesContainer.scrollTop = messagesContainer.scrollHeight - currentScrollHeight;
-
+        // Абнаўляем offset для будучых запытаў
         offset += messages.length;
+
+        // Абнаўляем стан загрузкі
         loadingHistory = false;
+
+        // Пракрутка на верх
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
     });
 }
 
-// Захоўваем цяперашні стан скролу
-document.addEventListener('DOMContentLoaded', function () {
-    const messagesContainer = document.getElementById('chatMessages');
-
-    // Абнаўленне скролу пасля дабаўлення ўсіх паведамленняў
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-
-    // Абслугоўваем падзею скролу
-    messagesContainer.addEventListener('scroll', () => {
-        if (messagesContainer.scrollTop === 0) {
-            loadHistory();
-        }
-    });
+// Абслугоўваем падзею скролу
+messagesContainer.addEventListener('scroll', () => {
+    if (messagesContainer.scrollTop === 0) {
+        loadHistory();
+    }
 });
 
 // Абнаўленне спісу паведамленняў пры новых паведамленнях
 socket.on('message', (message) => {
-    const messagesContainer = document.getElementById('chatMessages');
-
     const messageElement = document.createElement('div');
     messageElement.className = 'chat-message';
 
@@ -106,7 +91,7 @@ socket.on('message', (message) => {
     messageElement.appendChild(timeElement); // Дадаем час
     messagesContainer.appendChild(messageElement);
 
-    // Пракрутка ўніз
+    // Пракрутка ўніз пасля дадавання паведамлення
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
 });
 
@@ -195,3 +180,4 @@ document.getElementById('info').addEventListener('click', function () {
         window.location.href = '/article';
     }
 });
+

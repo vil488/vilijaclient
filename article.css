@@ -122,12 +122,12 @@ body:not(.light-theme) .icon-bar button svg {
 
 .article-list .close-article {
     background-color: transparent;
-    border: 1.5px solid currentColor;
-    color: currentColor;
+    border: none;
+    fill: currentColor;
     padding: 10px 20px;
     cursor: pointer;
     font-family: 'RobotoMono', monospace;
-    border-radius: 5px;
+    
     margin-top: 10px;
 }
 
@@ -167,17 +167,7 @@ body:not(.light-theme) .article-list-item {
 
 
 
-/* Стылі для кнопкі "Close" */
-button.close-article svg {
-    fill: var(--day-w);
-    border: none;
-    width: 24px;
-    height: 24px;
-}
 
-button.close-article.light-theme svg{
-    fill: var(--night-b);
-}
 
 
 

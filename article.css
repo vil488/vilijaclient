@@ -173,22 +173,6 @@ button {
     font-family: 'RobotoMono', monospace;
 }
 
-/* Адаптыўнасць */
-@media (max-width: 768px) {
-    .icon-bar {
-        justify-content: center;
-        padding: 10px;
-    }
-
-    .article-list, .article-view {
-        width: 100%;
-        padding: 15px;
-    }
-
-    .article-view {
-        display: block;
-    }
-}
 
 /* Стылі для скролера */
 .article-list::-webkit-scrollbar {
@@ -224,13 +208,7 @@ body.light-theme .article-list {
     }
     
 
-    /* body.light-theme .icon-bar button:hover svg {
-        fill: #dc0062;
-    }
     
-    body:not(.light-theme) .icon-bar button:hover svg {
-        fill: #dc0062;
-    } */
 
     article:hover {
         background-color: #dc0062;; /* Фон для hover */
@@ -276,3 +254,75 @@ body.light-theme .article-list {
     }
 }
 
+
+
+
+@media (max-width: 768px) {
+    
+
+    .article-list-item {
+        padding: 8px;
+        margin-top: 8px;
+        font-size: 0.9rem;
+    }
+
+    
+    .article {
+        display: flex;
+        flex-direction: column;
+        width: 100%; 
+        margin: 0; 
+        padding: 5px; 
+        background: transparent;
+        border: none;
+        overflow: hidden;
+        height: 550px;
+        margin-top: 5%;
+    }    
+
+    .icon-bar button svg {
+        width: 40px; /* Памер SVG */
+        height: 40px;
+        fill: currentColor; /* Колер іконкі адпавядае currentColor */
+        transition: fill 0.3s ease; /* Плыўная змена колеру */
+    }
+
+    .icon-bar button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        border-radius: 0;
+        padding-left: 16px;
+        padding-bottom: 8px;
+        padding-right: 0%;
+        background-color: transparent;
+    }
+
+    #chasopis{
+        display: none;
+    }
+
+    .article-list {
+      
+        
+        margin: 10px 0;
+        padding: 10px;
+        font-size: 0.9rem; 
+    }
+
+    .div1{
+        display: flex;
+        justify-content: flex-end;
+        
+        background-color: transparent;
+    }
+
+    
+    
+}
+  
+
+  

@@ -45,7 +45,16 @@ function openArticle(article) {
         <p>${article.text}</p>
         <div class="autar">Аўтар: <span>${article.author}</span></div>
         <div class="artickeldata">Дата: <span>${article.date}</span></div>
-        <button class="close-article" onclick="closeArticle()">Close</button>
+        <button class="close-article" onclick="closeArticle()">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000" height="800px" width="800px" version="1.1" id="XMLID_64_" viewBox="0 0 24 24" xml:space="preserve">
+                <g id="link-previous">
+                    <g>
+                        <polygon points="10.3,20.7 1.6,12 10.3,3.3 11.7,4.7 5.5,11 22,11 22,13 5.5,13 11.7,19.3"/>
+                    </g>
+                </g>
+            </svg>
+        </button>
+
     `;
 }
 

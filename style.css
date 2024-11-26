@@ -5,6 +5,12 @@
   font-style: normal; /* Дадаць italic, калі патрэбна */
 }
 
+:root {
+  --night-b: #090A0C; 
+  --day-w: #FFFEFC;
+  --fog-g: #AAA7A7;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -12,7 +18,7 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: black;
+  background-color: var(--night-b);
   font-family: "RobotoMono", monospace;
 }
 
@@ -28,23 +34,23 @@ body {
 }
 
 .input-field {
-  background-color: black;
+  background-color: var(--night-b);
   outline: none;
   width: 100%;
   padding: 10px;
   margin-bottom: 15px;
-  border: 1px solid whitesmoke;
+  border: 1px solid var(--day-w);
   border-radius: 0px;
   font-size: 16px;
-  color: whitesmoke;
+  color: var(--day-w);
   font-family: "RobotoMono", monospace;
 }
 
 .login-button {
   width: 100px;
   padding: 10px;
-  background-color: whitesmoke;
-  color: black;
+  background-color: var(--day-w);
+  color: var(--night-b);
   border: none;
   border-radius: 0;
   font-size: 16px;
@@ -54,11 +60,11 @@ body {
 
 .login-button:hover {
   background-color: #dc0062;
-  color: whitesmoke;
+  color: var(--day-w);
 }
 
 .input-field::placeholder {
-  color: whitesmoke; /* Колер placeholder */
+  color: var(--day-w); /* Колер placeholder */
   /* Неабавязкова, для стылю */
 }
 
@@ -66,8 +72,8 @@ body {
 .login-button {
   width: 100px;
   padding: 10px;
-  background-color: whitesmoke;
-  color: black;
+  background-color: var(--day-w);
+  color: var(--night-b);
   border: none;
   font-size: 16px;
   cursor: pointer;
@@ -86,7 +92,7 @@ body {
 .loading-spinner {
   width: 20px;
   height: 20px;
-  border: 3px solid #ffffff;
+  border: 3px solid var(--day-w);
   border-top: 3px solid #dc0062;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;

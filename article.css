@@ -5,15 +5,22 @@
     font-style: normal;
 }
 
+
+:root {
+    --night-b: #090A0C; 
+    --day-w: #FFFEFC;
+    --fog-g: #AAA7A7;
+}
+
 body {
     display: flex;
     justify-content: center;
     
     height: 100vh;
     margin: 0;
-    background-color: black;
+    background-color: var(--night-b);
     font-family: 'RobotoMono', monospace;
-    color: whitesmoke;
+    color: var(--day-w);
     transition: background-color 0.3s ease, color 0.3s ease;
 
 }
@@ -52,16 +59,16 @@ body {
 
 /* Светлая тэма */
 body.light-theme {
-    background-color: white;
-    color: black;
+    background-color: var(--day-w);
+    color: var(--night-b);
 }
 
 body.light-theme .icon-bar button svg {
-    fill: black; /* Іконкі ў светлай тэме будуць чорнымі */
+    fill: var(--night-b); /* Іконкі ў светлай тэме будуць чорнымі */
 }
 
 body:not(.light-theme) .icon-bar button svg {
-    fill: whitesmoke; /* Іконкі ў цёмнай тэме будуць белымі */
+    fill: var(--day-w); /* Іконкі ў цёмнай тэме будуць белымі */
 }
 
 .icon-bar {
@@ -96,7 +103,7 @@ body:not(.light-theme) .icon-bar button svg {
 /* Стыль для спісу артыкулаў */
 .article-list {
     margin-bottom: 20px;
-    border: 1.5px solid whitesmoke;
+    border: 1.5px solid var(--day-w);
     padding: 20px;
     display: block;
     height: 405px;
@@ -139,14 +146,14 @@ body:not(.light-theme) .icon-bar button svg {
 /* Змяніць стыль для элемента спісу */
 .article-list-item {
     padding: 10px;
-    border: 1.5px solid black;
+    border: 1.5px solid var(--night-b);
     margin-top: 10px;
     cursor: pointer;
 }
 
 body:not(.light-theme) .article-list-item {
     
-    border-color: white; /* Каб тэкст быў чытэльным */
+    border-color: var(--day-w); /* Каб тэкст быў чытэльным */
     /* Плыўны пераход */
 }
 
@@ -161,17 +168,16 @@ body:not(.light-theme) .article-list-item {
 
 
 /* Стылі для кнопкі "Close" */
-button {
+.close-article{
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: transparent;
-    border: 1.5px solid currentColor;
+    border: none;
     padding: 10px 20px;
     cursor: pointer;
-    border-radius: 5px;
-    font-family: 'RobotoMono', monospace;
 }
+
 
 
 /* Стылі для скролера */
@@ -191,7 +197,7 @@ button {
 
 /* Кнопка для светлай тэмы */
 body.light-theme .article-list {
-    border: 1.5px solid black; /* У светлай тэме бордэр чорны */
+    border: 1.5px solid var(--night-b); /* У светлай тэме бордэр чорны */
 }
 
 @media (hover: hover){
@@ -207,7 +213,9 @@ body.light-theme .article-list {
         fill: #dc0062; /* Дадаць эфект пры навядзенні ў светлай тэме */
     }
     
-
+    .close-article:hover{
+        fill: #dc0062;
+    }
     
 
     article:hover {
@@ -218,14 +226,14 @@ body.light-theme .article-list {
     body.light-theme .article-list-item:hover {
         background-color: #dc0062;
         color: white;
-        border-color: black; /* Каб тэкст быў чытэльным */
+        border-color: var(--night-b); /* Каб тэкст быў чытэльным */
         transition: background-color 0.3s ease; /* Плыўны пераход */
     }
     
     body:not(.light-theme) .article-list-item:hover {
         background-color: #dc0062; /* Змена фону пры hover */
-        border-color: whitesmoke; /* Бордэр белы ў цёмнай тэме */
-        color: white; 
+        border-color: var(--day-w); /* Бордэр белы ў цёмнай тэме */
+        color: var(--day-w); 
         transition: background-color 0.3s ease;
     }
 
@@ -251,6 +259,10 @@ body.light-theme .article-list {
 
     .icon-bar button:active svg {
         fill: #dc0062; /* Плавны пераход да колеру #dc0062 */
+    }
+
+    .close-article:active{
+        fill: #dc0062;
     }
 }
 

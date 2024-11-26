@@ -5,32 +5,38 @@
     font-style: normal; /* Дадаць italic, калі патрэбна */
 }
 
+:root {
+    --night-b: #090A0C; 
+    --day-w: #FFFEFC;
+    --fog-g: #AAA7A7;
+}
+
 body {
     display: flex;
     justify-content: center;
     
     height: 100vh;
     margin: 0;
-    background-color: black; /* Па змаўчанні цёмная тэма */
+    background-color:var(--night-b) ; /* Па змаўчанні цёмная тэма */
     font-family: 'RobotoMono', monospace;
-    color: whitesmoke; /* Па змаўчанні колер тэксту */
+    color: var(--day-w); /* Па змаўчанні колер тэксту */
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Светлая тэма */
 body.light-theme {
-    background-color: white;
-    color: black;
+    background-color: var(--day-w);
+    color: var(--night-b);
 
 }
 
 /* Дадаем адпаведнасць тэмы для ікон */
 body.light-theme .icon-bar button svg {
-    fill: black; /* Чорны колер для светлай тэмы */
+    fill: var(--night-b); /* Чорны колер для светлай тэмы */
 }
 
 body:not(.light-theme) .icon-bar button svg {
-    fill: whitesmoke; /* Белы колер для цёмнай тэмы */
+    fill: var(--day-w); /* Белы колер для цёмнай тэмы */
 }
 
 .chat-container {
@@ -83,7 +89,8 @@ body:not(.light-theme) .icon-bar button svg {
     transition: all 0.3s ease;
     min-height: 40px;
     max-height: 150px;
-    color: currentColor; /* Колер тэксту залежыць ад тэмы */
+    color: currentColor;
+    color: var(--day-w); /* Колер тэксту залежыць ад тэмы */
 }
 
 .chat-input button {
@@ -193,7 +200,7 @@ body:not(.light-theme) .icon-bar button svg {
 .chat-message-time{
     font-size: x-small;
     margin-top: 3px;
-    color: gray;
+    color: var(--fog-g);
 }
 
 
@@ -218,12 +225,12 @@ button {
   
   /* Змены колеру для светлай тэмы */
   body.light-theme button svg {
-    fill: black; /* Іконка чорная ў светлай тэме */
+    fill: var(--night-b); /* Іконка чорная ў светлай тэме */
   }
 
   /* Змены колеру для цёмнай тэмы */
   body:not(.light-theme) button svg {
-    fill: whitesmoke; /* Іконка белая ў цёмнай тэме */
+    fill: var(--day-w); /* Іконка белая ў цёмнай тэме */
   }
   
 
@@ -280,9 +287,9 @@ button {
         
         height: auto;
         padding: 5px;
-        background-color: black; /* Па змаўчанні цёмная тэма */
+        background-color: var(--night-b); /* Па змаўчанні цёмная тэма */
         font-family: 'RobotoMono', monospace;
-        color: whitesmoke; /* Па змаўчанні колер тэксту */
+        color: var(--day-w); /* Па змаўчанні колер тэксту */
         transition: background-color 0.3s ease, color 0.3s ease;
     }
 
@@ -311,13 +318,13 @@ button {
 
     
   body.light-theme button:hover svg {
-    fill: whitesmoke; /* Іконка зялёная пры навядзенні */
+    fill: var(--day-w); /* Іконка зялёная пры навядзенні */
   }
   
   
   
   body:not(.light-theme) button:hover svg {
-    fill: whitesmoke; /* Іконка зялёная пры навядзенні */
+    fill: var(--day-w); /* Іконка зялёная пры навядзенні */
   }
   
   .chat-input button:hover {
@@ -339,13 +346,13 @@ button {
 
     
   body.light-theme button:active svg {
-    fill: whitesmoke; /* Іконка зялёная пры навядзенні */
+    fill: var(--day-w); /* Іконка зялёная пры навядзенні */
   }
   
   
   
   body:not(.light-theme) button:active svg {
-    fill: whitesmoke; /* Іконка зялёная пры навядзенні */
+    fill: var(--day-w); /* Іконка зялёная пры навядзенні */
   }
   
   .chat-input button:active {
@@ -378,7 +385,7 @@ button {
 #chatInput::-webkit-scrollbar-thumb {
     background-color: #dc0062; /* Колер скролбара */
     border-radius: 5px; /* Закругленая форма */
-    border: 2px solid #fff; /* Белая мяжа */
+    border: 2px solid var(--day-w); /* Белая мяжа */
     transition: background-color 0.3s ease; /* Пераход для змянення колеру */
 }
 

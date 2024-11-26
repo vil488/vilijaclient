@@ -7,8 +7,26 @@ document.querySelector('.login-button').addEventListener('click', function () {
 
   const errorMessageElement = document.getElementById('error-message');
 
+  usernameInput.focus();
+
+  usernameInput.addEventListener("input", () => {
+    usernameInput.value = usernameInput.value.charAt(0).toUpperCase() + usernameInput.value.slice(1);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      if (document.activeElement === usernameInput) {
+        // Пераход на поле паролю
+        passwordInput.focus();
+      } else if (document.activeElement === passwordInput) {
+        // Клік па кнопцы логіна
+        loginButton.click();
+      }
+    }
+  });
+
   if (!username || !password) {
-    alert('Калі ласка, увядзіце лагін і пароль!');
+    errorMessageElement.textContent = 'Калі ласка, увядзіце лагін і пароль!';
     return;
   }
 

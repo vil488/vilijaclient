@@ -37,8 +37,11 @@ function loadHistory() {
             return;
         }
 
-        // Add messages to the bottom
-        messages.reverse().forEach((message) => {
+        // Reverse the order of messages
+        messages.reverse();
+
+        // Add messages to the top
+        messages.forEach((message) => {
             const messageElement = document.createElement('div');
             messageElement.className = 'chat-message';
             messageElement.innerHTML = `
@@ -46,7 +49,7 @@ function loadHistory() {
                 <div>${message.text.replace(/\n/g, '<br>')}</div>
                 <div class="chat-message-time">${formatTime(message.timestamp)}</div>
             `;
-            messagesContainer.appendChild(messageElement);
+            messagesContainer.insertBefore(messageElement, messagesContainer.firstChild);
         });
 
         // Update offset for future requests
@@ -59,6 +62,7 @@ function loadHistory() {
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
     });
 }
+
 
 
 // Абслугоўваем падзею скролу

@@ -32,11 +32,16 @@ function formatTime(dateString) {
     return new Intl.DateTimeFormat('en-GB', options).format(date); // Вяртае гадзіну і хвіліну
 }
 
-socket.on('load history', async ({ offset }, callback) => {
-    const limit = 20; // Колькасць паведамленняў за раз
-    const messages = await loadHistory(offset, limit); // Функцыя для загрузкі з базы даных
-    callback(messages);
+socket.emit('load history', { offset }, (messages) => {
+    if (messages && messages.length > 0) {
+        // апрацоўка атрымання паведамленняў
+        console.log('Messages loaded:', messages);
+        offset += messages.length;
+    } else {
+        console.log('No messages to load');
+    }
 });
+
 
 // Абнаўленне спісу паведамленняў пры загрузцы гісторыі
 function loadHistory() {

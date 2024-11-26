@@ -191,4 +191,7 @@ document.getElementById('info').addEventListener('click', function () {
     }
 });
 
- loadHistory()
+// Дадай выклік функцыі пасля загрузкі старонкі
+window.onload = function() {
+    loadHistory();
+};

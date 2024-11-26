@@ -69,6 +69,7 @@ function loadHistory() {
         // Scroll to bottom after loading messages
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
     });
+    console.log(messages)
 }
 
 

@@ -24,12 +24,16 @@ function formatTime(dateString) {
 
 // Функцыя для шыфравання паведамлення
 function encryptMessage(message, secretKey) {
+    // Шыфруем паведамленне з дапамогай AES і пераўтворым у радок
     return CryptoJS.AES.encrypt(message, secretKey).toString();
 }
 
 // Функцыя для дэшыфравання паведамлення
 function decryptMessage(encryptedMessage, secretKey) {
+    // Дэшыфруем паведамленне
     const bytes = CryptoJS.AES.decrypt(encryptedMessage, secretKey);
+    
+    // Пераўтвараем з байтаў у радок у фармаце UTF-8
     return bytes.toString(CryptoJS.enc.Utf8);
 }
 

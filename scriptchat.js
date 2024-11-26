@@ -33,7 +33,6 @@ function decryptMessage(encryptedMessage, secretKey) {
 
 
 
-
 function loadHistory() {
     if (loadingHistory) return;
     loadingHistory = true;
@@ -68,9 +67,12 @@ function loadHistory() {
 
         // Scroll to bottom after loading messages
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+        // Now you can safely log the messages inside the callback
+        console.log(messages);
     });
-    console.log(messages)
 }
+
 
 
 // Абслугоўваем падзею скролу

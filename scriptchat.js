@@ -63,6 +63,11 @@ socket.emit('load history', { offset }, (messages) => {
     loadingHistory = false;
 });
 
+// Захоўваем цяперашні стан скролу
+const currentScrollHeight = messagesContainer.scrollHeight;
+
+// Пасля таго як дадалі новыя паведамленні ў верх, усталёўваем scrollTop
+messagesContainer.scrollTop = messagesContainer.scrollHeight - currentScrollHeight;
 
 
 // Абнаўленне спісу паведамленняў пры загрузцы гісторыі
@@ -75,12 +80,13 @@ function loadHistory() {
             loadingHistory = false; // Больш няма дадзеных
             return;
         }
-
+    
         const messagesContainer = document.getElementById('chatMessages');
-
+    
         // Захоўваем цяперашні стан скролу
         const currentScrollHeight = messagesContainer.scrollHeight;
-
+    
+        // Дадаем старое паведамленне ўверх
         messages.forEach((message) => {
             const messageElement = document.createElement('div');
             messageElement.className = 'chat-message';
@@ -89,15 +95,17 @@ function loadHistory() {
                 <div>${message.text.replace(/\n/g, '<br>')}</div>
                 <div class="chat-message-time">${formatTime(message.timestamp)}</div>
             `;
-            messagesContainer.appendChild(messageElement);
+            messagesContainer.insertBefore(messageElement, messagesContainer.firstChild);
         });
-
+    
         // Аднаўляем становішча скролу
         messagesContainer.scrollTop = messagesContainer.scrollHeight - currentScrollHeight;
-
-        offset += messages.length; // Павялічваем адступ
+    
+        offset += messages.length;
         loadingHistory = false;
     });
+    
+    
 }
 
 
@@ -116,6 +124,8 @@ messagesContainer.addEventListener('scroll', () => {
 
 
 
+// Абнаўленне спісу паведамленняў пры новых паведамленнях
+// Абнаўленне спісу паведамленняў пры новых паведамленнях
 // Абнаўленне спісу паведамленняў пры новых паведамленнях
 // Абнаўленне спісу паведамленняў пры новых паведамленнях
 socket.on('message', (message) => {
@@ -146,6 +156,8 @@ socket.on('message', (message) => {
     // Пракрутка ўніз
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
 });
+
+
 
 
 

@@ -32,15 +32,37 @@ function formatTime(dateString) {
     return new Intl.DateTimeFormat('en-GB', options).format(date); // Вяртае гадзіну і хвіліну
 }
 
+
+
 socket.emit('load history', { offset }, (messages) => {
-    if (messages && messages.length > 0) {
-        // апрацоўка атрымання паведамленняў
-        console.log('Messages loaded:', messages);
-        offset += messages.length;
-    } else {
-        console.log('No messages to load');
+    console.log('Loaded history:', messages); // Лаг для праверкі атрыманых дадзеных
+    if (messages.length === 0) {
+        loadingHistory = false; // Больш няма дадзеных
+        return;
     }
+    
+    // Захоўваем цяперашні стан скролу
+    const messagesContainer = document.getElementById('chatMessages');
+    const currentScrollHeight = messagesContainer.scrollHeight;
+
+    messages.forEach((message) => {
+        const messageElement = document.createElement('div');
+        messageElement.className = 'chat-message';
+        messageElement.innerHTML = `
+            <div class="chat-message-username" style="color: ${message.color || '#FFFFFF'}">${message.sender}</div>
+            <div>${message.text.replace(/\n/g, '<br>')}</div>
+            <div class="chat-message-time">${formatTime(message.timestamp)}</div>
+        `;
+        messagesContainer.appendChild(messageElement);
+    });
+
+    // Аднаўляем становішча скролу
+    messagesContainer.scrollTop = messagesContainer.scrollHeight - currentScrollHeight;
+
+    offset += messages.length;
+    loadingHistory = false;
 });
+
 
 
 // Абнаўленне спісу паведамленняў пры загрузцы гісторыі

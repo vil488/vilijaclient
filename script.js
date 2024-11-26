@@ -8,11 +8,9 @@ document.querySelector('.login-button').addEventListener('click', function () {
 
   const errorMessageElement = document.getElementById('error-message');
 
-    // Усталёўваем фокус на поле для імя пры загрузцы
-    username.focus();
-
+   
     // Дадаем слухача для аўтаматычнай вялікай літары
-    usernameInput.addEventListener("input", () => {
+    username.addEventListener("input", () => {
       const value = username.value;
       username.value = value.charAt(0).toUpperCase() + value.slice(1);
     });

@@ -11,16 +11,15 @@ const socket = io('https://vilija.onrender.com', {
     },
 });
 
+let offset = 0;
+let loadingHistory = false;
+
+
 // Падключэнне да сервера
 socket.on('connect', () => {
     console.log('Successfully connected to the server');
   
-    // Абнаўленне гісторыі чата
-    const chatHistory = getChatMessages();
-    chatHistory.forEach(message => {
-        message.color = message.color || '#FFFFFF'; // Па змоўчанні белы колер
-    });
-    socket.emit('chat history', chatHistory);
+    
 });
 
 // Функцыя для фарматавання часу (гадзіна і хвіліна)
@@ -73,6 +72,7 @@ function loadHistory() {
         loadingHistory = false;
     });
 }
+
 
 
 const messagesContainer = document.getElementById('chatMessages');

@@ -46,7 +46,10 @@ function loadHistory() {
     if (loadingHistory) return;
     loadingHistory = true;
 
+    // Выклікаем падзею на сервер для атрымання гісторыі чата
     socket.emit('load history', { offset }, (messages) => {
+        console.log('Messages:', messages);  // Лагуем атрыманыя паведамленні
+
         if (messages.length === 0) {
             loadingHistory = false; // No more data
             return;
@@ -77,7 +80,7 @@ function loadHistory() {
         // Scroll to bottom after loading messages
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-        // Now you can safely log the messages inside the callback
+        // Лагуем атрыманыя паведамленні
         console.log(messages);
     });
 }

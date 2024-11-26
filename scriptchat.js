@@ -1,3 +1,6 @@
+// Для шыфравання мы выкарыстоўваем бібліятэку CryptoJS на фронтэндзе (прыклад для AES)
+const CryptoJS = require('crypto-js');  // Падключаем бібліятэку для шыфравання
+
 // Ініцыялізуем падключэнне WebSocket пасля таго, як скрыпт socket.io загружаны
 const socket = io('https://vilija.onrender.com', {
     auth: {
@@ -10,12 +13,6 @@ let loadingHistory = false;
 
 const messagesContainer = document.getElementById('chatMessages');
 
-// Падключэнне да сервера
-socket.on('connect', () => {
-    console.log('Successfully connected to the server');
-    loadHistory();  // Загружаем гісторыю пасля падключэння
-});
-
 // Функцыя для фарматавання часу (гадзіна і хвіліна)
 function formatTime(dateString) {
     const options = {
@@ -24,6 +21,17 @@ function formatTime(dateString) {
     };
     const date = new Date(dateString); // Пераўтворыце timestamp у аб'ект Date
     return new Intl.DateTimeFormat('en-GB', options).format(date); // Вяртае гадзіну і хвіліну
+}
+
+// Функцыя для шыфравання паведамлення
+function encryptMessage(message, secretKey) {
+    return CryptoJS.AES.encrypt(message, secretKey).toString();
+}
+
+// Функцыя для дэшыфравання паведамлення
+function decryptMessage(encryptedMessage, secretKey) {
+    const bytes = CryptoJS.AES.decrypt(encryptedMessage, secretKey);
+    return bytes.toString(CryptoJS.enc.Utf8);
 }
 
 // Абнаўленне спісу паведамленняў пры загрузцы гісторыі
@@ -42,11 +50,12 @@ function loadHistory() {
 
         // Add messages to the top
         messages.forEach((message) => {
+            const decryptedMessage = decryptMessage(message.text, 'your_secret_key_here'); // Дэшыфруем паведамленне
             const messageElement = document.createElement('div');
             messageElement.className = 'chat-message';
             messageElement.innerHTML = `
                 <div class="chat-message-username" style="color: ${message.color || '#FFFFFF'}">${message.sender}</div>
-                <div>${message.text.replace(/\n/g, '<br>')}</div>
+                <div>${decryptedMessage.replace(/\n/g, '<br>')}</div>
                 <div class="chat-message-time">${formatTime(message.timestamp)}</div>
             `;
             messagesContainer.insertBefore(messageElement, messagesContainer.firstChild);
@@ -63,8 +72,6 @@ function loadHistory() {
     });
 }
 
-
-
 // Абслугоўваем падзею скролу
 messagesContainer.addEventListener('scroll', () => {
     if (messagesContainer.scrollTop === 0) {
@@ -74,6 +81,7 @@ messagesContainer.addEventListener('scroll', () => {
 
 // Абнаўленне спісу паведамленняў пры новых паведамленнях
 socket.on('message', (message) => {
+    const decryptedMessage = decryptMessage(message.text, 'your_secret_key_here'); // Дэшыфруем паведамленне
     const messageElement = document.createElement('div');
     messageElement.className = 'chat-message';
 
@@ -81,11 +89,10 @@ socket.on('message', (message) => {
     usernameElement.className = 'chat-message-username';
     usernameElement.textContent = message.sender;
 
-    // Задаем колер для імя карыстальніка
     usernameElement.style.color = message.color;  // Адпраўляемы калер у кожным паведамленні
 
     const textElement = document.createElement('div');
-    textElement.innerHTML = message.text.replace(/\n/g, '<br>');
+    textElement.innerHTML = decryptedMessage.replace(/\n/g, '<br>');
 
     const timeElement = document.createElement('div');
     timeElement.className = 'chat-message-time';
@@ -106,10 +113,10 @@ function sendMessage() {
 
     if (input.value.trim() !== '') {
         const color = localStorage.getItem('color') || '#FFFFFF';
+        const encryptedMessage = encryptMessage(input.value.trim(), 'your_secret_key_here'); // Шыфруем паведамленне
 
-        // Адпраўляем паведамленне з \n (без замены на <br>)
         socket.emit('message', {
-            text: input.value.trim(),
+            text: encryptedMessage,
             senderColor: color
         });
 
@@ -128,10 +135,8 @@ chatInput.addEventListener("keydown", (event) => {
 
 // Абработчык для кнопкі тэмы
 document.getElementById('theme').addEventListener('click', function () {
-    // Змяняем клас тэмы ў body
     document.body.classList.toggle('light-theme');
 
-    // Захоўваем стан тэмы ў LocalStorage
     const currentTheme = document.body.classList.contains('light-theme') ? 'light' : 'dark';
     localStorage.setItem('theme', currentTheme);
 });
@@ -146,13 +151,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // Функцыя для выхаду
 function logout() {
-    // Выдаляем токен з localStorage
     localStorage.removeItem('token');
-    // Перанакіроўваем на старонку лагіна
     window.location.href = 'index.html';
 }
 
-// Абработчык націску на кнопку "logout"
 const logoutButton = document.getElementById('logout');
 if (logoutButton) {
     logoutButton.addEventListener('click', logout);

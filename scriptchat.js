@@ -1,6 +1,5 @@
 // Для шыфравання мы выкарыстоўваем бібліятэку CryptoJS на фронтэндзе (прыклад для AES)
 const CryptoJS = require('crypto-js');  // Падключаем бібліятэку для шыфравання
-
 // Ініцыялізуем падключэнне WebSocket пасля таго, як скрыпт socket.io загружаны
 const socket = io('https://vilija.onrender.com', {
     auth: {

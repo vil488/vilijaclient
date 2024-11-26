@@ -35,7 +35,7 @@ function formatTime(dateString) {
 
 socket.on('load history', async ({ offset }, callback) => {
     const limit = 20; // Колькасць паведамленняў за раз
-    const messages = await getMessagesFromDB(offset, limit); // Функцыя для загрузкі з базы даных
+    const messages = await loadHistory(offset, limit); // Функцыя для загрузкі з базы даных
     callback(messages);
 });
 

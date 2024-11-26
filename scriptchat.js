@@ -10,6 +10,15 @@ let loadingHistory = false;
 
 const messagesContainer = document.getElementById('chatMessages');
 
+socket.on('connect', () => {
+    console.log('Socket connected');
+    loadHistory();  // Памятай, што тут мы выклікаем loadHistory пасля падключэння
+});
+
+socket.on('connect_error', (err) => {
+    console.error('Socket connection error:', err);
+});
+
 // Функцыя для фарматавання часу (гадзіна і хвіліна)
 function formatTime(dateString) {
     const options = {

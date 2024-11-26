@@ -9,24 +9,7 @@ document.querySelector('.login-button').addEventListener('click', function () {
   const errorMessageElement = document.getElementById('error-message');
 
    
-    // Дадаем слухача для аўтаматычнай вялікай літары
-    username.addEventListener("input", () => {
-      const value = username.value;
-      username.value = value.charAt(0).toUpperCase() + value.slice(1);
-    });
   
-    // Слухач для націску клавішы Enter
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "Enter") {
-        if (document.activeElement === username) {
-          // Пераход да поля пароля
-          passwordInput.focus();
-        } else if (document.activeElement === password) {
-          // Эмуляцыя націску кнопкі логіна
-          button.click();
-        }
-      }
-    });
 
   if (!username || !password) {
     errorMessageElement.textContent = 'Калі ласка, увядзіце лагін і пароль!';

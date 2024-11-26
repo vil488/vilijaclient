@@ -26,16 +26,14 @@ function encryptMessage(message, secretKey) {
     return CryptoJS.AES.encrypt(message, secretKey).toString();
 }
 
-// Функцыя для дэшыфравання паведамлення
 function decryptMessage(encryptedMessage, secretKey) {
-    // Дэшыфруем паведамленне
     const bytes = CryptoJS.AES.decrypt(encryptedMessage, secretKey);
-    
-    // Пераўтвараем з байтаў у радок у фармаце UTF-8
     return bytes.toString(CryptoJS.enc.Utf8);
 }
 
-// Абнаўленне спісу паведамленняў пры загрузцы гісторыі
+
+
+
 function loadHistory() {
     if (loadingHistory) return;
     loadingHistory = true;
@@ -72,6 +70,7 @@ function loadHistory() {
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
     });
 }
+
 
 // Абслугоўваем падзею скролу
 messagesContainer.addEventListener('scroll', () => {
@@ -189,4 +188,4 @@ document.getElementById('info').addEventListener('click', function () {
     }
 });
 
-loadHistory()
+ loadHistory()

@@ -188,3 +188,5 @@ document.getElementById('info').addEventListener('click', function () {
         window.location.href = '/article';
     }
 });
+
+loadHistory()

@@ -168,14 +168,15 @@ body:not(.light-theme) .article-list-item {
 
 
 /* Стылі для кнопкі "Close" */
-.close-article{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: transparent;
+button.close-article svg {
+    fill: var(--day-w);
     border: none;
-    padding: 10px 20px;
-    cursor: pointer;
+    width: 24px;
+    height: 24px;
+}
+
+button.close-article.light-theme svg{
+    fill: var(--night-b);
 }
 
 

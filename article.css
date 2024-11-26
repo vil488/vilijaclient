@@ -18,6 +18,38 @@ body {
 
 }
 
+.article-list::-webkit-scrollbar {
+    width: 2px;
+    height: 10px;
+    margin-right: 5px;
+}
+
+.article-list::-webkit-scrollbar-thumb {
+    background: #dc0062;
+    border-radius: 5px;
+    transition: width 0.2s ease;
+}
+
+.article-list::-webkit-scrollbar-track {
+    background-color: transparent;
+    border: none;
+}
+
+.article-list::-webkit-scrollbar-button {
+    background-color: transparent;
+    border-radius: 5px;
+}
+
+.article-list::-webkit-scrollbar-thumb:hover {
+    width: 8px;
+    background-color: #dc0062;
+}
+
+.article-list {
+    scrollbar-width: thin; /* Тонкі скролбар */
+    scrollbar-color: #dc0062 transparent; /* Колер палоскі і трэка */
+}
+
 /* Светлая тэма */
 body.light-theme {
     background-color: white;

@@ -63,6 +63,8 @@ body:not(.light-theme) .icon-bar button svg {
     background: transparent;
     border: 1.5px solid currentColor; /* Колер мяжы залежыць ад тэмы */
     border-radius: 0px;
+    overflow-y: auto; /* паказваць вертыкальны скролбар, калі гэта неабходна */
+    overflow-x: hidden;
     
 }
 
@@ -126,6 +128,11 @@ body:not(.light-theme) .icon-bar button svg {
 .chat-messages::-webkit-scrollbar-thumb:hover {
     width: 8px;
     background-color: #dc0062;
+}
+
+.chat-message {
+    scrollbar-width: thin; /* Тонкі скролбар */
+    scrollbar-color: #dc0062 transparent; /* Колер палоскі і трэка */
 }
 
 /* Панэль ікон */
@@ -332,4 +339,47 @@ button {
     transition: background 0.3s ease;
 }
 
+}
+
+
+
+
+
+
+#chatInput{
+    overflow-y: auto;
+}
+/* Стыль для скролбара ў textarea */
+#chatInput::-webkit-scrollbar {
+    width: 8px; /* Шырыня скролбара */
+    height: 8px; /* Вышыня скролбара */
+}
+
+/* Стыль для трэка (фону) скролбара */
+#chatInput::-webkit-scrollbar-track {
+    background-color: transparent; /* Цэлы трэк празрысты */
+}
+
+/* Стыль для "thumb" (палоскі) скролбара */
+#chatInput::-webkit-scrollbar-thumb {
+    background-color: #dc0062; /* Колер скролбара */
+    border-radius: 5px; /* Закругленая форма */
+    border: 2px solid #fff; /* Белая мяжа */
+    transition: background-color 0.3s ease; /* Пераход для змянення колеру */
+}
+
+/* Стыль для "thumb" пры навядзенні */
+#chatInput::-webkit-scrollbar-thumb:hover {
+    background-color: #9e005c; /* Змяняецца колер на гэты пры навядзенні */
+}
+
+/* Схаваць кнопкі скролбара */
+#chatInput::-webkit-scrollbar-button {
+    display: none;
+}
+
+/* Для Firefox */
+#chatInput {
+    scrollbar-width: thin; /* Тонкі скролбар */
+    scrollbar-color: #dc0062 transparent; /* Колер палоскі і трэка */
 }

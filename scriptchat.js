@@ -117,6 +117,12 @@ function sendMessage() {
 
 
 
+chatInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" && !event.shiftKey) { // Shift + Enter для новага радка
+        event.preventDefault(); // Пазбегнуць пераносу радка
+        sendMessage();
+    }
+});
 
 // Абработчык для кнопкі тэмы
 document.getElementById('theme').addEventListener('click', function () {

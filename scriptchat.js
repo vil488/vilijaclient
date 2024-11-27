@@ -22,6 +22,8 @@ socket.on('connect_error', (err) => {
 
 
 
+
+
 let secretKey = ''; //сам ключ
 
 
@@ -225,6 +227,7 @@ function sendMessage() {
     if (!secretKey) {
         console.warn('Секрэтны ключ адсутнічае. Немагчыма зашыфраваць і адпраўляць паведамленні.');
         return;
+        setSecretKey();
     }
 
     const input = document.getElementById('chatInput');

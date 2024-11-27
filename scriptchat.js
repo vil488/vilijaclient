@@ -30,27 +30,30 @@ let secretKey = ''; //сам ключ
 let SECRET_KEY = '';//для расшыфроўкі ключа(nое што ўводзіць крыстальнік)
 
 // Функцыя для запыту і дэшыфроўкі ключа
-async function fetchAndDecryptKey() {
+async function fetchAndDecryptKey(SECRET_KEY) {
     try {
         const response = await fetch('https://vilija.onrender.com/get-key');
         const data = await response.json();
+        
+        console.log('Ключ, атрыманы з сервера:', data.key); // Праверка, што вяртаецца з сервера
 
         if (data.key) {
             const bytes = CryptoJS.AES.decrypt(data.key, SECRET_KEY);
             secretKey = bytes.toString(CryptoJS.enc.Utf8);
 
+            console.log('Дэшыфраваны ключ:', secretKey);
+
             if (!secretKey) {
                 console.error('Дэшыфроўка вярнула пусты ключ. Праверце SECRET_KEY.');
-            } else {
-                console.log('Дэшыфраваны ключ:', secretKey);
             }
         } else {
-            console.error('Сервер не вярнуў ключ.');
+            console.error('Не атрыманы ключ з сервера.');
         }
     } catch (error) {
-        console.error('Памылка падчас запыту або дэшыфроўкі ключа:', error);
+        console.error('Памылка падчас запыту або дэшыфроўкі:', error);
     }
 }
+
 
 
 
@@ -93,7 +96,7 @@ async function setSecretKey() {
     inputField.value = ''; // Ачышчаем поле ўводу
 
     // Спрабуем дэшыфраваць ключ і абнавіць інтэрфейс
-    await fetchAndDecryptKey();
+    await fetchAndDecryptKey(SECRET_KEY);
 
     if (secretKey) {
         const chatMessages = document.getElementById('chatMessages');

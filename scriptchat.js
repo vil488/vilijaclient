@@ -80,6 +80,7 @@ async function initializeChat() {
 
 
 async function setSecretKey() {
+    console.log('сетСікретКей функцыя запусцілася');
     const inputField = document.getElementById('chatInput');
     const inputValue = inputField.value.trim();
 
@@ -100,8 +101,12 @@ async function setSecretKey() {
         inputField.placeholder = 'Увядзіце паведамленне...';
         loadHistory();
     } else {
+        console.log(SECRET_KEY);
+        console(secretKey)
         console.error('Не атрымалася дэшыфраваць ключ. Праверце ваш SECRET_KEY.');
     }
+
+    console.log(SECRET_KEY);
 }
 
 

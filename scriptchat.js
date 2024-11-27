@@ -55,14 +55,28 @@ function initializeChat() {
     }
 }
 
-// Захаванне ключа і аднаўленне стандартнага функцыяналу
 function setSecretKey() {
+    // Атрымаць значэнне з поля ўводу
+    const inputField = document.getElementById('chatInput');
+    const inputValue = inputField.value.trim(); // Абразаем лішнія прабелы
 
-    
-    SECRET_KEY = document.getElementById('chatInput');
+    if (inputValue === '') {
+        console.warn('Ключ не можа быць пустым.');
+        return;
+    }
+
+    // Захаваць ключ
+    SECRET_KEY = inputValue;
+
+    // Ачысціць поле ўводу
+    inputField.value = '';
+
+    // Абнавіць паведамленні
     const chatMessages = document.getElementById('chatMessages');
     chatMessages.innerHTML = '<p>Ключ захаваны. Цяпер вы можаце выкарыстоўваць чат.</p>';
-    document.getElementById('chatInput').placeholder = 'Увядзіце паведамленне...';
+
+    // Абнавіць placeholder
+    inputField.placeholder = 'Увядзіце паведамленне...';
 }
 
 
@@ -286,7 +300,7 @@ document.getElementById('info').addEventListener('click', function () {
 
 // Дадай выклік функцыі пасля загрузкі старонкі
 window.onload = function() {
-  
+    initializeChat()
     fetchAndDecryptKey()
 
 };

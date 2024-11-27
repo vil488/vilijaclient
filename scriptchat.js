@@ -19,6 +19,53 @@ socket.on('connect_error', (err) => {
     console.error('Socket connection error:', err);
 });
 
+
+
+
+let secretKey = ''; //сам ключ
+
+
+const SECRET_KEY = '';//для расшыфроўкі ключа(nое што ўводзіць крыстальнік)
+
+// Функцыя для запыту і дэшыфроўкі ключа
+async function fetchAndDecryptKey() {
+    try {
+        const response = await fetch('http://vilija.onrender.com/get-key');
+        const data = await response.json();
+
+        if (data.key) {
+            // Дэшыфроўка ключа
+            const bytes = CryptoJS.AES.decrypt(data.key, SECRET_KEY);
+            secretKey = bytes.toString(CryptoJS.enc.Utf8);
+
+            console.log('Decrypted Key:', secretKey);
+        } else {
+            console.error('No key received from the server.');
+        }
+    } catch (error) {
+        console.error('Error fetching or decrypting the key:', error);
+    }
+}
+
+function initializeChat() {
+    const chatMessages = document.getElementById('chatMessages');
+    if (!SECRET_KEY) {
+        chatMessages.innerHTML = '<p>Увядзіце ключ:</p>';
+    }
+}
+
+// Захаванне ключа і аднаўленне стандартнага функцыяналу
+function setSecretKey(input) {
+    SECRET_KEY = input;
+    const chatMessages = document.getElementById('chatMessages');
+    chatMessages.innerHTML = '<p>Ключ захаваны. Цяпер вы можаце выкарыстоўваць чат.</p>';
+    document.getElementById('chatInput').placeholder = 'Увядзіце паведамленне...';
+}
+
+
+
+
+
 // Функцыя для фарматавання часу (гадзіна і хвіліна)
 function formatTime(dateString) {
     const options = {
@@ -28,6 +75,9 @@ function formatTime(dateString) {
     const date = new Date(dateString); // Пераўтворыце timestamp у аб'ект Date
     return new Intl.DateTimeFormat('en-GB', options).format(date); // Вяртае гадзіну і хвіліну
 }
+
+
+
 
 // Функцыя для шыфравання паведамлення
 function encryptMessage(message, secretKey) {
@@ -42,25 +92,33 @@ function decryptMessage(encryptedMessage, secretKey) {
 
 
 
+
+
 function loadHistory() {
+    // Праверка: калі secretKey пусты, функцыя не працуе
+    if (!secretKey) {
+        console.warn('Секрэтны ключ адсутнічае. Загрузіць гісторыю немагчыма.');
+        return;
+    }
+
     if (loadingHistory) return;
     loadingHistory = true;
 
-    // Выклікаем падзею на сервер для атрымання гісторыі чата
+    // Запыт на сервер для атрымання гісторыі
     socket.emit('load history', { offset }, (messages) => {
-        console.log('Messages:', messages);  // Лагуем атрыманыя паведамленні
+        console.log('Messages:', messages);
 
         if (messages.length === 0) {
-            loadingHistory = false; // No more data
+            loadingHistory = false; // Няма дадатковых дадзеных
             return;
         }
 
-        // Reverse the order of messages
+        // Зваротны парадак паведамленняў
         messages.reverse();
 
-        // Add messages to the top
+        // Дадаем паведамленні ўверх
         messages.forEach((message) => {
-            const decryptedMessage = decryptMessage(message.text, 'your_secret_key_here'); // Дэшыфруем паведамленне
+            const decryptedMessage = decryptMessage(message.text, secretKey); // Дэшыфроўка паведамлення
             const messageElement = document.createElement('div');
             messageElement.className = 'chat-message';
             messageElement.innerHTML = `
@@ -71,19 +129,17 @@ function loadHistory() {
             messagesContainer.insertBefore(messageElement, messagesContainer.firstChild);
         });
 
-        // Update offset for future requests
+        // Абнаўленне offset для будучых запытаў
         offset += messages.length;
 
-        // Update loading state
+        // Абнаўленне стану загрузкі
         loadingHistory = false;
 
-        // Scroll to bottom after loading messages
+        // Скрол уніз пасля загрузкі паведамленняў
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
-
-        // Лагуем атрыманыя паведамленні
-        console.log(messages);
     });
 }
+
 
 
 
@@ -96,48 +152,67 @@ messagesContainer.addEventListener('scroll', () => {
 
 // Абнаўленне спісу паведамленняў пры новых паведамленнях
 socket.on('message', (message) => {
-    const decryptedMessage = decryptMessage(message.text, 'your_secret_key_here'); // Дэшыфруем паведамленне
+    // Праверка: калі secretKey пусты, паведамленні не апрацоўваюцца
+    if (!secretKey) {
+        console.warn('Секрэтны ключ адсутнічае. Немагчыма дэкрыпіраваць паведамленне.');
+        return;
+    }
+
+    const decryptedMessage = decryptMessage(message.text, secretKey); // Дэшыфруем паведамленне
     const messageElement = document.createElement('div');
     messageElement.className = 'chat-message';
 
+    // Імя карыстальніка
     const usernameElement = document.createElement('div');
     usernameElement.className = 'chat-message-username';
     usernameElement.textContent = message.sender;
+    usernameElement.style.color = message.color; // Калер імя карыстальніка
 
-    usernameElement.style.color = message.color;  // Адпраўляемы калер у кожным паведамленні
-
+    // Тэкст паведамлення
     const textElement = document.createElement('div');
     textElement.innerHTML = decryptedMessage.replace(/\n/g, '<br>');
 
+    // Час паведамлення
     const timeElement = document.createElement('div');
     timeElement.className = 'chat-message-time';
-    timeElement.textContent = formatTime(message.timestamp); // Фарматуем час для кожнага паведамлення
+    timeElement.textContent = formatTime(message.timestamp);
 
+    // Дадаем элементы ў паведамленне
     messageElement.appendChild(usernameElement);
     messageElement.appendChild(textElement);
-    messageElement.appendChild(timeElement); // Дадаем час
+    messageElement.appendChild(timeElement);
+
+    // Дадаем паведамленне ў кантэйнер
     messagesContainer.appendChild(messageElement);
 
     // Пракрутка ўніз пасля дабаўлення паведамлення
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
 });
 
+
 // Функцыя для адпраўкі паведамлення
 function sendMessage() {
     const input = document.getElementById('chatInput');
+    
+    // Праверка: калі secretKey пусты, функцыя не працуе
+    if (!secretKey) {
+        console.warn('Секрэтны ключ адсутнічае. Адправіць паведамленне немагчыма.');
+        return;
+    }
 
     if (input.value.trim() !== '') {
         const color = localStorage.getItem('color') || '#FFFFFF';
-        const encryptedMessage = encryptMessage(input.value.trim(), 'your_secret_key_here'); // Шыфруем паведамленне
+        const encryptedMessage = encryptMessage(input.value.trim(), secretKey); // Шыфроўка паведамлення
 
         socket.emit('message', {
             text: encryptedMessage,
             senderColor: color
         });
 
-        input.value = ''; // Ачышчэнне поля ўводу
+        input.value = ''; // Ачыстка поля ўводу
     }
 }
+
 
 const chatInput = document.getElementById("chatInput");
 
@@ -206,4 +281,6 @@ document.getElementById('info').addEventListener('click', function () {
 // Дадай выклік функцыі пасля загрузкі старонкі
 window.onload = function() {
     loadHistory();
+    fetchAndDecryptKey()
+
 };

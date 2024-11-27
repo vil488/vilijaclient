@@ -40,17 +40,18 @@ async function fetchAndDecryptKey() {
             secretKey = bytes.toString(CryptoJS.enc.Utf8);
 
             if (!secretKey) {
-                console.warn('Немагчыма дэшыфраваць ключ. Праверце, ці правільны SECRET_KEY.');
+                console.error('Дэшыфроўка вярнула пусты ключ. Праверце SECRET_KEY.');
             } else {
-                console.log('Decrypted Key:', secretKey);
+                console.log('Дэшыфраваны ключ:', secretKey);
             }
         } else {
-            console.error('No key received from the server.');
+            console.error('Сервер не вярнуў ключ.');
         }
     } catch (error) {
-        console.error('Error fetching or decrypting the key:', error);
+        console.error('Памылка падчас запыту або дэшыфроўкі ключа:', error);
     }
 }
+
 
 
 async function initializeChat() {
@@ -77,32 +78,31 @@ async function initializeChat() {
 
 
 
-function setSecretKey() {
-    // Атрымаць значэнне з поля ўводу
+async function setSecretKey() {
     const inputField = document.getElementById('chatInput');
-    const inputValue = inputField.value.trim(); // Абразаем лішнія прабелы
+    const inputValue = inputField.value.trim();
 
     if (inputValue === '') {
         console.warn('Ключ не можа быць пустым.');
         return;
     }
 
-    // Захаваць ключ у зменную
-    SECRET_KEY = inputValue;
+    SECRET_KEY = inputValue; // Захоўваем уведзены ключ
+    inputField.value = ''; // Ачышчаем поле ўводу
 
-    // Ачысціць поле ўводу
-    inputField.value = '';
+    // Спрабуем дэшыфраваць ключ і абнавіць інтэрфейс
+    await fetchAndDecryptKey();
 
-    // Абнавіць паведамленні
-    const chatMessages = document.getElementById('chatMessages');
-    chatMessages.innerHTML = '<p>Ключ захаваны. Цяпер вы можаце выкарыстоўваць чат.</p>';
-
-    // Абнавіць placeholder
-    inputField.placeholder = 'Увядзіце паведамленне...';
-    loadHistory()
-    fetchAndDecryptKey()
-
+    if (secretKey) {
+        const chatMessages = document.getElementById('chatMessages');
+        chatMessages.innerHTML = '<p>Ключ захаваны. Цяпер вы можаце выкарыстоўваць чат.</p>';
+        inputField.placeholder = 'Увядзіце паведамленне...';
+        loadHistory();
+    } else {
+        console.error('Не атрымалася дэшыфраваць ключ. Праверце ваш SECRET_KEY.');
+    }
 }
+
 
 
 

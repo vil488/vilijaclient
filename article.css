@@ -217,8 +217,8 @@ body.light-theme .article-list {
         fill: #dc0062; /* Дадаць эфект пры навядзенні ў светлай тэме */
     }
     
-    body.article-list .close-article:hover svg{
-        fill: #dc0062;
+    .article-list .close-article:hover svg{
+        fill: #dc0062 !important;
     }
     
 
@@ -265,8 +265,8 @@ body.light-theme .article-list {
         fill: #dc0062; /* Плавны пераход да колеру #dc0062 */
     }
 
-    body.article-list .close-article:active svg{
-        fill: #dc0062;
+    .article-list .close-article:active svg{
+        fill: #dc0062 !important;
     }
 }
 

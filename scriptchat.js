@@ -115,11 +115,6 @@ function decryptMessage(encryptedMessage, secretKey) {
 
 
 function loadHistory() {
-    // Праверка: калі secretKey пусты, функцыя не працуе
-    if (!secretKey) {
-        console.warn('Секрэтны ключ адсутнічае. Загрузіць гісторыю немагчыма.');
-        return;
-    }
 
     if (loadingHistory) return;
     loadingHistory = true;

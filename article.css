@@ -138,8 +138,8 @@ body:not(.light-theme) .article-list .close-article svg{
 }
 
 .article-list .close-article svg {
-    width: 60px;
-    height: 60px;
+    width: 40px;
+    height: 40px;
     fill: currentColor;
     transition: fill 0.3s ease;
 }
@@ -217,7 +217,7 @@ body.light-theme .article-list {
         fill: #dc0062; /* Дадаць эфект пры навядзенні ў светлай тэме */
     }
     
-    .article-list .close-article:hover{
+    .article-list .close-article:hover svg{
         fill: #dc0062;
     }
     
@@ -265,7 +265,7 @@ body.light-theme .article-list {
         fill: #dc0062; /* Плавны пераход да колеру #dc0062 */
     }
 
-    .article-list .close-article:active{
+    .article-list .close-article:active svg{
         fill: #dc0062;
     }
 }

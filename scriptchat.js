@@ -210,16 +210,13 @@ socket.on('message', (message) => {
 
 // Функцыя для адпраўкі паведамлення
 function sendMessage() {
-    if(!secretKey){
+    if(secretKey === ''){
         setSecretKey()
     }
     const input = document.getElementById('chatInput');
     
     // Праверка: калі secretKey пусты, функцыя не працуе
-    if (!secretKey) {
-        console.warn('Секрэтны ключ адсутнічае. Адправіць паведамленне немагчыма.');
-        return;
-    }
+    
 
     if (input.value.trim() !== '') {
         const color = localStorage.getItem('color') || '#FFFFFF';

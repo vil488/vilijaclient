@@ -25,7 +25,7 @@ socket.on('connect_error', (err) => {
 let secretKey = ''; //сам ключ
 
 
-const SECRET_KEY = '';//для расшыфроўкі ключа(nое што ўводзіць крыстальнік)
+let SECRET_KEY = '';//для расшыфроўкі ключа(nое што ўводзіць крыстальнік)
 
 // Функцыя для запыту і дэшыфроўкі ключа
 async function fetchAndDecryptKey() {
@@ -65,7 +65,7 @@ function setSecretKey() {
         return;
     }
 
-    // Захаваць ключ
+    // Захаваць ключ у зменную
     SECRET_KEY = inputValue;
 
     // Ачысціць поле ўводу
@@ -78,6 +78,7 @@ function setSecretKey() {
     // Абнавіць placeholder
     inputField.placeholder = 'Увядзіце паведамленне...';
 }
+
 
 
 

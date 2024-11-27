@@ -323,7 +323,7 @@ body.light-theme .article-list {
 
     .article-list {
       
-        
+        height: 100vh;
         margin: 10px 0;
         padding: 10px;
         font-size: 0.9rem; 

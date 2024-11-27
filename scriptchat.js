@@ -78,6 +78,7 @@ async function initializeChat() {
 
 
 
+
 async function setSecretKey() {
     const inputField = document.getElementById('chatInput');
     const inputValue = inputField.value.trim();

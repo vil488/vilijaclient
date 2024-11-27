@@ -34,26 +34,41 @@ async function fetchAndDecryptKey() {
         const data = await response.json();
 
         if (data.key) {
-            // Дэшыфроўка ключа
             const bytes = CryptoJS.AES.decrypt(data.key, SECRET_KEY);
             secretKey = bytes.toString(CryptoJS.enc.Utf8);
 
-            console.log('Decrypted Key:', secretKey);
+            if (!secretKey) {
+                console.warn('Немагчыма дэшыфраваць ключ. Праверце, ці правільны SECRET_KEY.');
+            } else {
+                console.log('Decrypted Key:', secretKey);
+            }
         } else {
             console.error('No key received from the server.');
         }
     } catch (error) {
         console.error('Error fetching or decrypting the key:', error);
     }
-    
 }
 
-function initializeChat() {
+
+async function initializeChat() {
     const chatMessages = document.getElementById('chatMessages');
     if (!SECRET_KEY) {
         chatMessages.innerHTML = '<p>Увядзіце ключ:</p>';
+        return;
+    }
+
+    // Чакаем дэшыфроўку ключа
+    await fetchAndDecryptKey();
+
+    if (secretKey) {
+        chatMessages.innerHTML = '<p>Ключ захаваны. Цяпер вы можаце выкарыстоўваць чат.</p>';
+        loadHistory();
+    } else {
+        console.error('Немагчыма дэшыфраваць ключ.');
     }
 }
+
 
 function setSecretKey() {
     // Атрымаць значэнне з поля ўводу
@@ -207,13 +222,12 @@ socket.on('message', (message) => {
 
 // Функцыя для адпраўкі паведамлення
 function sendMessage() {
-    if(secretKey === ''){
-        setSecretKey()
+    if (!secretKey) {
+        console.warn('Секрэтны ключ адсутнічае. Немагчыма зашыфраваць і адпраўляць паведамленні.');
+        return;
     }
+
     const input = document.getElementById('chatInput');
-    
-    // Праверка: калі secretKey пусты, функцыя не працуе
-    
 
     if (input.value.trim() !== '') {
         const color = localStorage.getItem('color') || '#FFFFFF';
@@ -221,12 +235,13 @@ function sendMessage() {
 
         socket.emit('message', {
             text: encryptedMessage,
-            senderColor: color
+            senderColor: color,
         });
 
         input.value = ''; // Ачыстка поля ўводу
     }
 }
+
 
 
 const chatInput = document.getElementById("chatInput");
@@ -259,6 +274,9 @@ function logout() {
     localStorage.removeItem('token');
     window.location.href = 'index.html';
 }
+
+
+
 
 const logoutButton = document.getElementById('logout');
 if (logoutButton) {

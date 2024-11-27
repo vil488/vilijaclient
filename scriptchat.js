@@ -105,7 +105,7 @@ async function setSecretKey() {
         loadHistory();
     } else {
         console.log(SECRET_KEY);
-        console(secretKey)
+       
         console.error('Не атрымалася дэшыфраваць ключ. Праверце ваш SECRET_KEY.');
     }
 

@@ -35,13 +35,13 @@ async function fetchAndDecryptKey(SECRET_KEY) {
         const response = await fetch('https://vilija.onrender.com/get-key');
         const data = await response.json();
         
-        console.log('Ключ, атрыманы з сервера:', data.key); // Праверка, што вяртаецца з сервера
+         // Праверка, што вяртаецца з сервера
 
         if (data.key) {
             const bytes = CryptoJS.AES.decrypt(data.key, SECRET_KEY);
             secretKey = bytes.toString(CryptoJS.enc.Utf8);
 
-            console.log('Дэшыфраваны ключ:', secretKey);
+            
 
             if (!secretKey) {
                 console.error('Дэшыфроўка вярнула пусты ключ. Праверце SECRET_KEY.');
@@ -104,12 +104,12 @@ async function setSecretKey() {
         inputField.placeholder = 'Увядзіце паведамленне...';
         loadHistory();
     } else {
-        console.log(SECRET_KEY);
+        
        
         console.error('Не атрымалася дэшыфраваць ключ. Праверце ваш SECRET_KEY.');
     }
 
-    console.log(SECRET_KEY);
+    
 }
 
 

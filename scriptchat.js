@@ -30,7 +30,7 @@ const SECRET_KEY = '';//для расшыфроўкі ключа(nое што ў
 // Функцыя для запыту і дэшыфроўкі ключа
 async function fetchAndDecryptKey() {
     try {
-        const response = await fetch('http://vilija.onrender.com/get-key');
+        const response = await fetch('https://vilija.onrender.com/get-key');
         const data = await response.json();
 
         if (data.key) {
@@ -45,6 +45,7 @@ async function fetchAndDecryptKey() {
     } catch (error) {
         console.error('Error fetching or decrypting the key:', error);
     }
+    loadHistory();
 }
 
 function initializeChat() {
@@ -55,8 +56,10 @@ function initializeChat() {
 }
 
 // Захаванне ключа і аднаўленне стандартнага функцыяналу
-function setSecretKey(input) {
-    SECRET_KEY = input;
+function setSecretKey() {
+
+    
+    SECRET_KEY = document.getElementById('chatInput');
     const chatMessages = document.getElementById('chatMessages');
     chatMessages.innerHTML = '<p>Ключ захаваны. Цяпер вы можаце выкарыстоўваць чат.</p>';
     document.getElementById('chatInput').placeholder = 'Увядзіце паведамленне...';
@@ -192,6 +195,9 @@ socket.on('message', (message) => {
 
 // Функцыя для адпраўкі паведамлення
 function sendMessage() {
+    if(!secretKey){
+        setSecretKey()
+    }
     const input = document.getElementById('chatInput');
     
     // Праверка: калі secretKey пусты, функцыя не працуе
@@ -280,7 +286,7 @@ document.getElementById('info').addEventListener('click', function () {
 
 // Дадай выклік функцыі пасля загрузкі старонкі
 window.onload = function() {
-    loadHistory();
+  
     fetchAndDecryptKey()
 
 };

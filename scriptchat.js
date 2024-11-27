@@ -12,7 +12,7 @@ const messagesContainer = document.getElementById('chatMessages');
 
 socket.on('connect', () => {
     console.log('Socket connected');
-    loadHistory();  // Памятай, што тут мы выклікаем loadHistory пасля падключэння
+    fetchAndDecryptKey()  // Памятай, што тут мы выклікаем loadHistory пасля падключэння
 });
 
 socket.on('connect_error', (err) => {
@@ -45,7 +45,7 @@ async function fetchAndDecryptKey() {
     } catch (error) {
         console.error('Error fetching or decrypting the key:', error);
     }
-    loadHistory();
+    
 }
 
 function initializeChat() {
@@ -77,6 +77,8 @@ function setSecretKey() {
 
     // Абнавіць placeholder
     inputField.placeholder = 'Увядзіце паведамленне...';
+    loadHistory()
+
 }
 
 

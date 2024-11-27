@@ -72,6 +72,11 @@ async function initializeChat() {
 }
 
 
+
+
+
+
+
 function setSecretKey() {
     // Атрымаць значэнне з поля ўводу
     const inputField = document.getElementById('chatInput');
@@ -95,6 +100,7 @@ function setSecretKey() {
     // Абнавіць placeholder
     inputField.placeholder = 'Увядзіце паведамленне...';
     loadHistory()
+    fetchAndDecryptKey()
 
 }
 
@@ -224,10 +230,11 @@ socket.on('message', (message) => {
 
 // Функцыя для адпраўкі паведамлення
 function sendMessage() {
-    if (!secretKey) {
+    if (secretKey === '') {
         console.warn('Секрэтны ключ адсутнічае. Немагчыма зашыфраваць і адпраўляць паведамленні.');
-        return;
         setSecretKey();
+        return;
+       
     }
 
     const input = document.getElementById('chatInput');

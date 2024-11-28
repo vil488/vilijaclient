@@ -149,39 +149,37 @@ let messagesArray = [];  // Масіў для захоўвання паведа�
 
 
 function loadHistory() {
-    if (loadingHistory) return;
+    if (loadingHistory || noMoreHistory) return; // Спыняем, калі ўжо ідзе загрузка або гісторыя скончылася
     loadingHistory = true;
 
     socket.emit('load history', { offset }, (messages) => {
-        console.log('Loaded messages:', messages);
-
         if (messages.length === 0) {
+            console.log('No more messages to load.');
+            noMoreHistory = true; // Сцяг: больш няма гісторыі
             loadingHistory = false;
             return;
         }
 
         if (!secretKey) {
-            console.warn('Секрэтны ключ адсутнічае. Немагчыма дэкрыпіраваць паведамленні з гісторыі.');
-            loadingHistory = false; 
+            console.warn('Секрэтны ключ адсутнічае. Немагчыма дэкрыпіраваць паведамленні.');
+            loadingHistory = false;
             return;
         }
 
-        const decryptedMessages = messages.map((message) => {
-            return {
-                sender: message.sender,
-                color: message.color,
-                text: decryptMessage(message.text, secretKey),
-                timestamp: message.timestamp,
-            };
-        });
+        const decryptedMessages = messages.map((message) => ({
+            sender: message.sender,
+            color: message.color,
+            text: decryptMessage(message.text, secretKey),
+            timestamp: message.timestamp,
+        }));
 
         // Дадаем новыя паведамленні ў масіў
         messagesArray = [...decryptedMessages, ...messagesArray];
 
-        // Сартыруем паведамленні па часу
-        messagesArray.sort((a, b) => a.timestamp - b.timestamp);
+        // Сартыруем паведамленні
+        messagesArray.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
 
-        // Адлюстроўваем паведамленні
+        // Абнаўляем UI
         renderMessages();
 
         // Абнаўляем offset
@@ -190,6 +188,7 @@ function loadHistory() {
         loadingHistory = false;
     });
 }
+
 
 
 
@@ -235,10 +234,11 @@ function renderMessages() {
 
 
 messagesContainer.addEventListener('scroll', () => {
-    if (messagesContainer.scrollTop === 0) {
-        loadHistory();  // Загружаем гісторыю, калі скрол дасягнуў верху
+    if (messagesContainer.scrollTop === 0 && !noMoreHistory) {
+        loadHistory(); // Загружаем гісторыю толькі калі яшчэ ёсць паведамленні
     }
 });
+
 
 
 

@@ -150,7 +150,6 @@ function loadHistory() {
     if (loadingHistory) return;
     loadingHistory = true;
 
-    // Запыт на сервер для атрымання паведамленняў
     socket.emit('load history', { offset }, (messages) => {
         console.log('Loaded messages:', messages);
 
@@ -159,14 +158,12 @@ function loadHistory() {
             return;
         }
 
-        // Пераканайцеся, што key існуе перад дэшыфроўкай
         if (!secretKey) {
             console.warn('Секрэтны ключ адсутнічае. Немагчыма дэкрыпіраваць паведамленні з гісторыі.');
             loadingHistory = false;
             return;
         }
 
-        // Дэшыфруем паведамленні з гісторыі
         const decryptedMessages = messages.map((message) => {
             return {
                 sender: message.sender,
@@ -177,7 +174,7 @@ function loadHistory() {
         });
 
         // Дадаем новыя паведамленні ў масіў
-        messagesArray = [...decryptedMessages.reverse(), ...messagesArray];
+        messagesArray = [...decryptedMessages, ...messagesArray];
 
         // Сартыруем паведамленні па часу
         messagesArray.sort((a, b) => a.timestamp - b.timestamp);

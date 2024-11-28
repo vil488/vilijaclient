@@ -159,8 +159,8 @@ function loadHistory() {
         // Зваротны парадак паведамленняў (старэйшыя паведамленні)
         messages.reverse();
 
-        // Дадаем паведамленні ў верхнюю частку
-        messages.forEach((message) => {
+         // Дадаем паведамленні ўверх у правільным парадку
+         messages.forEach((message) => {
             const decryptedMessage = decryptMessage(message.text, secretKey); // Дэшыфроўка паведамлення
             const messageElement = document.createElement('div');
             messageElement.className = 'chat-message';

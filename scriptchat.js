@@ -68,7 +68,7 @@ async function initializeChat() {
     await fetchAndDecryptKey();
 
     if (secretKey) {
-        chatMessages.innerHTML = '<p>Ключ захаваны. Цяпер вы можаце выкарыстоўваць чат.</p>';
+        chatMessages.innerHTML = '<p id="logtext">Ключ захаваны. Цяпер вы можаце выкарыстоўваць чат.</p>';
         loadHistory();
     } else {
         console.error('Немагчыма дэшыфраваць ключ.');
@@ -100,7 +100,7 @@ async function setSecretKey() {
 
     if (secretKey) {
         const chatMessages = document.getElementById('chatMessages');
-        chatMessages.innerHTML = '<p>Ключ захаваны. Цяпер вы можаце выкарыстоўваць чат.</p>';
+        chatMessages.innerHTML = '<p id="logtext">Ключ захаваны. Цяпер вы можаце выкарыстоўваць чат.</p>';
         inputField.placeholder = 'Увядзіце паведамленне...';
         loadHistory();
     } else {

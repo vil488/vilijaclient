@@ -39,6 +39,14 @@ body:not(.light-theme) .icon-bar button svg {
     fill: var(--day-w); /* Белы колер для цёмнай тэмы */
 }
 
+#logtext{
+    
+    background-color: transparent;
+    
+    color: green;
+    font-size: small;
+}
+
 .chat-container {
     display: flex;
         background: transparent;
@@ -90,7 +98,7 @@ body:not(.light-theme) .icon-bar button svg {
     min-height: 40px;
     max-height: 150px;
     color: currentColor;
-    color: var(--day-w); /* Колер тэксту залежыць ад тэмы */
+   
 }
 
 .chat-input button {

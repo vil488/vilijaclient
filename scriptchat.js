@@ -143,45 +143,82 @@ function formatTime(dateString) {
 
 
 
+let messagesArray = [];  // Масіў для захоўвання паведамленняў
+
+
 function loadHistory() {
-    if (loadingHistory) return;  // Калі ўжо ідзе загрузка, не запытваем дадатковыя паведамленні
+    if (loadingHistory) return;
     loadingHistory = true;
 
-    // Запыт на сервер для атрымання гісторыі
+    // Запыт на сервер для атрымання паведамленняў
     socket.emit('load history', { offset }, (messages) => {
-        console.log('Messages:', messages);
+        console.log('Loaded messages:', messages);
 
         if (messages.length === 0) {
-            loadingHistory = false; // Няма дадатковых дадзеных
+            loadingHistory = false;
             return;
         }
 
-        // Зваротны парадак паведамленняў (старэйшыя паведамленні)
-        messages.reverse();
+        // Дадаем новыя паведамленні ў масіў
+        messagesArray = [...messages.reverse(), ...messagesArray];
 
-         // Дадаем паведамленні ўверх у правільным парадку
-         messages.forEach((message) => {
-            const decryptedMessage = decryptMessage(message.text, secretKey); // Дэшыфроўка паведамлення
-            const messageElement = document.createElement('div');
-            messageElement.className = 'chat-message';
-            messageElement.innerHTML = `
-                <div class="chat-message-username" style="color: ${message.color || '#FFFFFF'}">${message.sender}</div>
-                <div>${decryptedMessage.replace(/\n/g, '<br>')}</div>
-                <div class="chat-message-time">${formatTime(message.timestamp)}</div>
-            `;
-            messagesContainer.insertBefore(messageElement, messagesContainer.firstChild);
-        });
+        // Сартыруем паведамленні па часу, ад самага ранняга да апошняга
+        messagesArray.sort((a, b) => a.timestamp - b.timestamp);
 
-        // Абнаўленне offset для будучых запытаў
+        // Адлюстроўваем паведамленні
+        renderMessages();
+
+        // Абнаўляем offset
         offset += messages.length;
 
-        // Абнаўленне стану загрузкі
         loadingHistory = false;
-
-        // Скрол уніз пасля загрузкі паведамленняў
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
     });
 }
+
+function renderMessages() {
+    // Ачышчаем кантэйнер перад адлюстраваннем новых паведамленняў
+    messagesContainer.innerHTML = '';
+
+    // Дадаем усе паведамленні ў кантэйнер
+    messagesArray.forEach((message) => {
+        const messageElement = document.createElement('div');
+        messageElement.className = 'chat-message';
+
+        // Імя карыстальніка
+        const usernameElement = document.createElement('div');
+        usernameElement.className = 'chat-message-username';
+        usernameElement.textContent = message.sender;
+        usernameElement.style.color = message.color;
+
+        // Тэкст паведамлення
+        const textElement = document.createElement('div');
+        textElement.innerHTML = message.text.replace(/\n/g, '<br>');
+
+        // Час паведамлення
+        const timeElement = document.createElement('div');
+        timeElement.className = 'chat-message-time';
+        timeElement.textContent = formatTime(message.timestamp);
+
+        // Дадаем элементы ў паведамленне
+        messageElement.appendChild(usernameElement);
+        messageElement.appendChild(textElement);
+        messageElement.appendChild(timeElement);
+
+        // Дадаем паведамленне ў кантэйнер
+        messagesContainer.appendChild(messageElement);
+    });
+
+    // Пракрутка ўніз пасля адлюстравання
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
+
+messagesContainer.addEventListener('scroll', () => {
+    if (messagesContainer.scrollTop === 0) {
+        loadHistory();  // Загружаем гісторыю, калі скрол дасягнуў верху
+    }
+});
+
 
 
 
@@ -193,7 +230,9 @@ messagesContainer.addEventListener('scroll', () => {
 });
 
 
-// Абнаўленне спісу паведамленняў пры новых паведамленнях
+
+
+
 socket.on('message', (message) => {
     // Праверка: калі secretKey пусты, паведамленні не апрацоўваюцца
     if (!secretKey) {
@@ -201,35 +240,25 @@ socket.on('message', (message) => {
         return;
     }
 
-    const decryptedMessage = decryptMessage(message.text, secretKey); // Дэшыфруем паведамленне
-    const messageElement = document.createElement('div');
-    messageElement.className = 'chat-message';
+    // Дэшыфруем паведамленне
+    const decryptedMessage = decryptMessage(message.text, secretKey); 
+    
+    // Стварыць аб'ект для новага паведамлення
+    const newMessage = {
+        sender: message.sender,
+        color: message.color,
+        text: decryptedMessage,
+        timestamp: message.timestamp
+    };
 
-    // Імя карыстальніка
-    const usernameElement = document.createElement('div');
-    usernameElement.className = 'chat-message-username';
-    usernameElement.textContent = message.sender;
-    usernameElement.style.color = message.color; // Калер імя карыстальніка
+    // Дадаць паведамленне ў масіў
+    messagesArray.push(newMessage);
 
-    // Тэкст паведамлення
-    const textElement = document.createElement('div');
-    textElement.innerHTML = decryptedMessage.replace(/\n/g, '<br>');
+    // Сартыраваць паведамленні па часе
+    messagesArray.sort((a, b) => a.timestamp - b.timestamp);
 
-    // Час паведамлення
-    const timeElement = document.createElement('div');
-    timeElement.className = 'chat-message-time';
-    timeElement.textContent = formatTime(message.timestamp);
-
-    // Дадаем элементы ў паведамленне
-    messageElement.appendChild(usernameElement);
-    messageElement.appendChild(textElement);
-    messageElement.appendChild(timeElement);
-
-    // Дадаем паведамленне ў кантэйнер
-    messagesContainer.appendChild(messageElement);
-
-    // Пракрутка ўніз пасля дабаўлення паведамлення
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    // Адлюстроўваем паведамленні
+    renderMessages();
 });
 
 

@@ -150,13 +150,13 @@ let messagesArray = [];  // Масіў для захоўвання паведа�
 
 
 function loadHistory() {
-    if (loadingHistory || noMoreHistory) return; // Спыняем, калі ўжо ідзе загрузка або гісторыя скончылася
+    if (loadingHistory || noMoreHistory) return; // Спыняем, калі ідзе загрузка або гісторыя скончылася
     loadingHistory = true;
 
     socket.emit('load history', { offset }, (messages) => {
         if (messages.length === 0) {
             console.log('No more messages to load.');
-            noMoreHistory = true; // Сцяг: больш няма гісторыі
+            noMoreHistory = true;
             loadingHistory = false;
             return;
         }
@@ -174,21 +174,27 @@ function loadHistory() {
             timestamp: message.timestamp,
         }));
 
-        // Дадаем новыя паведамленні ў масіў
+        // Дадаем новыя паведамленні ў пачатак масіва
         messagesArray = [...decryptedMessages, ...messagesArray];
 
-        // Сартыруем паведамленні
+        // Сартыруем паведамленні па часу
         messagesArray.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
 
-        // Абнаўляем UI
+        // Падлічваем offset
+        offset += messages.length;
+
+        // Адлюстроўваем паведамленні
         renderMessages();
 
-        // Абнаўляем offset
-        offset += messages.length;
+        // Пасля рэндэрынгу пакідаем скрол на тым жа месцы, каб карыстальнік не губляў пазіцыю
+        if (messagesContainer.scrollHeight > messagesContainer.offsetHeight) {
+            messagesContainer.scrollTop = messagesContainer.scrollHeight - messagesContainer.offsetHeight;
+        }
 
         loadingHistory = false;
     });
 }
+
 
 
 
@@ -226,9 +232,12 @@ function renderMessages() {
         messagesContainer.appendChild(messageElement);
     });
 
-    // Пракрутка ўніз пасля адлюстравання
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    // Скролім уніз пасля пачатковай загрузкі
+    if (!loadingHistory && messagesContainer.scrollTop === 0) {
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
 }
+
 
 
 
@@ -256,32 +265,31 @@ messagesContainer.addEventListener('scroll', () => {
 
 
 socket.on('message', (message) => {
-    // Праверка: калі secretKey пусты, паведамленні не апрацоўваюцца
     if (!secretKey) {
         console.warn('Секрэтны ключ адсутнічае. Немагчыма дэкрыпіраваць паведамленне.');
         return;
     }
 
-    // Дэшыфруем паведамленне
-    const decryptedMessage = decryptMessage(message.text, secretKey); 
-    
-    // Стварыць аб'ект для новага паведамлення
-    const newMessage = {
+    const decryptedMessage = {
         sender: message.sender,
         color: message.color,
-        text: decryptedMessage,
-        timestamp: message.timestamp
+        text: decryptMessage(message.text, secretKey),
+        timestamp: message.timestamp,
     };
 
-    // Дадаць паведамленне ў масіў
-    messagesArray.push(newMessage);
+    // Дадаем новае паведамленне ў канец масіва
+    messagesArray.push(decryptedMessage);
 
-    // Сартыраваць паведамленні па часе
-    messagesArray.sort((a, b) => a.timestamp - b.timestamp);
+    // Сартыраваць усе паведамленні па часе
+    messagesArray.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
 
-    // Адлюстроўваем паведамленні
+    // Адлюстроўваем новае паведамленне
     renderMessages();
+
+    // Пракрутка ўніз пасля атрыманне новага паведамлення
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
 });
+
 
 
 // Функцыя для адпраўкі паведамлення

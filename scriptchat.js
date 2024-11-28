@@ -134,29 +134,13 @@ function decryptMessage(encryptedMessage, secretKey) {
 
 
 
-// Функцыя для фарматавання часу (гадзіна і хвіліна)
-function formatTime(dateString) {
-    const options = {
-        hour: '2-digit',
-        minute: '2-digit',
-    };
-    const date = new Date(dateString); // Пераўтворыце timestamp у аб'ект Date
-    return new Intl.DateTimeFormat('en-GB', options).format(date); // Вяртае гадзіну і хвіліну
-}
-
-
-
-let messagesArray = [];  // Масіў для захоўвання паведамленняў
-
-
 function loadHistory() {
-    if (loadingHistory || noMoreHistory) return; // Калі ідзе загрузка або няма больш гісторыі
+    if (loadingHistory || noMoreHistory) return; // Калі ідзе загрузка або гісторыя скончана
     loadingHistory = true;
 
     socket.emit('load history', { offset }, (messages) => {
         if (messages.length === 0) {
-            console.log('No more messages to load.');
-            noMoreHistory = true;
+            noMoreHistory = true; // Больш няма гісторыі
             loadingHistory = false;
             return;
         }
@@ -175,14 +159,14 @@ function loadHistory() {
             timestamp: message.timestamp,
         }));
 
-        // Дадаем новыя паведамленні ў пачатак масіва (бо гэта старыя паведамленні)
+        // Дадаем новыя паведамленні ў пачатак масіва
         messagesArray = [...decryptedMessages, ...messagesArray];
 
         // Абнаўляем offset
         offset += messages.length;
 
         // Адлюстроўваем паведамленні
-        renderMessages(true); // true паказвае, што мы не скролім уніз
+        renderMessages(true); // true - пакідаем скрол на месцы
 
         loadingHistory = false;
     });
@@ -193,49 +177,41 @@ function loadHistory() {
 
 
 
+
 function renderMessages(keepScrollPosition = false) {
-    const oldScrollHeight = messagesContainer.scrollHeight; // Захоўваем вышыню скролу
+    const oldScrollHeight = messagesContainer.scrollHeight;
 
-    // Ачышчаем кантэйнер
     messagesContainer.innerHTML = '';
-
-    // Адлюстроўваем усе паведамленні
     messagesArray.forEach((message) => {
         const messageElement = document.createElement('div');
         messageElement.className = 'chat-message';
 
-        // Імя карыстальніка
         const usernameElement = document.createElement('div');
         usernameElement.className = 'chat-message-username';
         usernameElement.textContent = message.sender;
         usernameElement.style.color = message.color;
 
-        // Тэкст паведамлення
         const textElement = document.createElement('div');
         textElement.innerHTML = message.text.replace(/\n/g, '<br>');
 
-        // Час паведамлення
         const timeElement = document.createElement('div');
         timeElement.className = 'chat-message-time';
         timeElement.textContent = formatTime(message.timestamp);
 
-        // Дадаем элементы ў паведамленне
         messageElement.appendChild(usernameElement);
         messageElement.appendChild(textElement);
         messageElement.appendChild(timeElement);
 
-        // Дадаем паведамленне ў кантэйнер
         messagesContainer.appendChild(messageElement);
     });
 
     if (keepScrollPosition) {
-        // Пасля падгрузкі гісторыі пакідаем скрол на ранейшым месцы
         messagesContainer.scrollTop = messagesContainer.scrollHeight - oldScrollHeight;
     } else {
-        // Пры першай загрузцы пракручваем уніз
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
 }
+
 
 
 

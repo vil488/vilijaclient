@@ -10,6 +10,7 @@ const socket = io('https://vilija.onrender.com', {
 let offset = 0;
 let loadingHistory = false;
 let noMoreHistory = false; 
+let messagesArray = [];
 
 const messagesContainer = document.getElementById('chatMessages');
 

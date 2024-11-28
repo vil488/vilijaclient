@@ -143,10 +143,8 @@ function formatTime(dateString) {
 
 
 
-
 function loadHistory() {
-
-    if (loadingHistory) return;
+    if (loadingHistory) return;  // Калі ўжо ідзе загрузка, не запытваем дадатковыя паведамленні
     loadingHistory = true;
 
     // Запыт на сервер для атрымання гісторыі
@@ -158,10 +156,10 @@ function loadHistory() {
             return;
         }
 
-        // Зваротны парадак паведамленняў
+        // Зваротны парадак паведамленняў (старэйшыя паведамленні)
         messages.reverse();
 
-        // Дадаем паведамленні ўверх
+        // Дадаем паведамленні ў верхнюю частку
         messages.forEach((message) => {
             const decryptedMessage = decryptMessage(message.text, secretKey); // Дэшыфроўка паведамлення
             const messageElement = document.createElement('div');
@@ -184,6 +182,7 @@ function loadHistory() {
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
     });
 }
+
 
 
 // Абслугоўваем падзею скролу

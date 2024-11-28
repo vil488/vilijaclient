@@ -144,42 +144,48 @@ function decryptMessage(encryptedMessage, secretKey) {
 
 
 function loadHistory() {
-    if (loadingHistory || noMoreHistory) return; // Калі ідзе загрузка або гісторыя скончана
+    if (loadingHistory || noMoreHistory) return;
+
     loadingHistory = true;
 
     socket.emit('load history', { offset }, (messages) => {
+        console.log('Loaded messages:', messages);
+
         if (messages.length === 0) {
-            noMoreHistory = true; // Больш няма гісторыі
+            noMoreHistory = true;
             loadingHistory = false;
             return;
         }
 
         if (!secretKey) {
-            console.warn('Секрэтны ключ адсутнічае. Немагчыма дэкрыпіраваць паведамленні.');
+            console.warn('Секрэтны ключ адсутнічае. Немагчыма дэкрыпіраваць паведамленні з гісторыі.');
             loadingHistory = false;
             return;
         }
 
-        // Дэшыфроўка паведамленняў
-        const decryptedMessages = messages.map((message) => ({
-            sender: message.sender,
-            color: message.color,
-            text: decryptMessage(message.text, secretKey),
-            timestamp: message.timestamp,
-        }));
+        const decryptedMessages = messages.map((message) => {
+            return {
+                sender: message.sender,
+                color: message.color,
+                text: decryptMessage(message.text, secretKey),
+                timestamp: message.timestamp,
+            };
+        });
 
         // Дадаем новыя паведамленні ў пачатак масіва
         messagesArray = [...decryptedMessages, ...messagesArray];
 
-        // Абнаўляем offset
-        offset += messages.length;
+        // Сартыруем усе паведамленні па ўзрастанні часу
+        messagesArray.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
 
         // Адлюстроўваем паведамленні
-        renderMessages(true); // true - пакідаем скрол на месцы
+        renderMessages();
 
+        offset += messages.length;
         loadingHistory = false;
     });
 }
+
 
 
 

@@ -151,53 +151,48 @@ function loadHistory() {
     loadingHistory = true;
 
     // Запыт на сервер для атрымання паведамленняў
-    function loadHistory() {
-        if (loadingHistory) return;
-        loadingHistory = true;
-    
-        // Запыт на сервер для атрымання паведамленняў
-        socket.emit('load history', { offset }, (messages) => {
-            console.log('Loaded messages:', messages);
-    
-            if (messages.length === 0) {
-                loadingHistory = false;
-                return;
-            }
-    
-            // Пераканайцеся, што key існуе перад дэшыфроўкай
-            if (!secretKey) {
-                console.warn('Секрэтны ключ адсутнічае. Немагчыма дэкрыпіраваць паведамленні з гісторыі.');
-                loadingHistory = false;
-                return;
-            }
-    
-            // Дэшыфруем паведамленні з гісторыі
-            const decryptedMessages = messages.map((message) => {
-                return {
-                    sender: message.sender,
-                    color: message.color,
-                    text: decryptMessage(message.text, secretKey),
-                    timestamp: message.timestamp,
-                };
-            });
-    
-            // Дадаем новыя паведамленні ў масіў
-            messagesArray = [...decryptedMessages.reverse(), ...messagesArray];
-    
-            // Сартыруем паведамленні па часу
-            messagesArray.sort((a, b) => a.timestamp - b.timestamp);
-    
-            // Адлюстроўваем паведамленні
-            renderMessages();
-    
-            // Абнаўляем offset
-            offset += messages.length;
-    
+    socket.emit('load history', { offset }, (messages) => {
+        console.log('Loaded messages:', messages);
+
+        if (messages.length === 0) {
             loadingHistory = false;
+            return;
+        }
+
+        // Пераканайцеся, што key існуе перад дэшыфроўкай
+        if (!secretKey) {
+            console.warn('Секрэтны ключ адсутнічае. Немагчыма дэкрыпіраваць паведамленні з гісторыі.');
+            loadingHistory = false;
+            return;
+        }
+
+        // Дэшыфруем паведамленні з гісторыі
+        const decryptedMessages = messages.map((message) => {
+            return {
+                sender: message.sender,
+                color: message.color,
+                text: decryptMessage(message.text, secretKey),
+                timestamp: message.timestamp,
+            };
         });
-    }
-    
+
+        // Дадаем новыя паведамленні ў масіў
+        messagesArray = [...decryptedMessages.reverse(), ...messagesArray];
+
+        // Сартыруем паведамленні па часу
+        messagesArray.sort((a, b) => a.timestamp - b.timestamp);
+
+        // Адлюстроўваем паведамленні
+        renderMessages();
+
+        // Абнаўляем offset
+        offset += messages.length;
+
+        loadingHistory = false;
+    });
 }
+
+
 
 function renderMessages() {
     // Ачышчаем кантэйнер перад адлюстраваннем новых паведамленняў

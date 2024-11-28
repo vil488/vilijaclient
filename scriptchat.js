@@ -14,7 +14,7 @@ const messagesContainer = document.getElementById('chatMessages');
 
 socket.on('connect', () => {
     console.log('Socket connected');
-    fetchAndDecryptKey()  // Памятай, што тут мы выклікаем loadHistory пасля падключэння
+    fetchAndDecryptKey()  
 });
 
 socket.on('connect_error', (err) => {
@@ -115,6 +115,8 @@ async function setSecretKey() {
 }
 
 
+
+
 function encryptMessage(message, secretKey) {
     // Шыфруем паведамленне з дапамогай AES і пераўтворым у радок
     return CryptoJS.AES.encrypt(message, secretKey).toString();
@@ -160,7 +162,7 @@ function loadHistory() {
 
         if (!secretKey) {
             console.warn('Секрэтны ключ адсутнічае. Немагчыма дэкрыпіраваць паведамленні з гісторыі.');
-            loadingHistory = false;
+            loadingHistory = false; 
             return;
         }
 
@@ -227,6 +229,9 @@ function renderMessages() {
     // Пракрутка ўніз пасля адлюстравання
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
 }
+
+
+
 
 
 messagesContainer.addEventListener('scroll', () => {

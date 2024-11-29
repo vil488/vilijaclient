@@ -47,6 +47,10 @@ body:not(.light-theme) .icon-bar button svg {
     font-size: small;
 }
 
+#ask{
+    font-size: small;
+}
+
 .chat-container {
     display: flex;
         background: transparent;

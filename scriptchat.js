@@ -1,18 +1,9 @@
 
 const socket = io('https://vilija.onrender.com', {
     auth: {
-        token: localStorage.getItem('token'), // Перадача токена пры падключэнні
+        token: localStorage.getItem('token'), 
     },
 });
-
-
-
-let offset = 0;
-let loadingHistory = false;
-let noMoreHistory = false; 
-let messagesArray = [];
-
-const messagesContainer = document.getElementById('chatMessages');
 
 socket.on('connect', () => {
     console.log('Socket connected');
@@ -23,16 +14,25 @@ socket.on('connect_error', (err) => {
     console.error('Socket connection error:', err);
 });
 
+ 
 
 
-
-
+let offset = 0;
+let loadingHistory = false;
+let noMoreHistory = false; 
+let messagesArray = [];
 
 let secretKey = ''; //сам ключ
-
 let SECRET_KEY = '';//для расшыфроўкі ключа(nое што ўводзіць крыстальнік)
 
-// Функцыя для запыту і дэшыфроўкі ключа
+
+const messagesContainer = document.getElementById('chatMessages');
+
+
+
+
+//БЯСПЕКА
+
 async function fetchAndDecryptKey(SECRET_KEY) {
     try {
         const response = await fetch('https://vilija.onrender.com/get-key');
@@ -58,11 +58,10 @@ async function fetchAndDecryptKey(SECRET_KEY) {
 
 
 
-
 async function initializeChat() {
     const chatMessages = document.getElementById('chatMessages');
     if (!SECRET_KEY) {
-        chatMessages.innerHTML = '<p>Увядзіце ключ:</p>';
+        chatMessages.innerHTML = '<p id="ask">Увядзіце ключ:</p>';
         return;
     }
 
@@ -76,21 +75,6 @@ async function initializeChat() {
         console.error('Немагчыма дэшыфраваць ключ.');
     }
 }
-
-
-
-
-function formatTime(timestamp) {
-    const date = new Date(timestamp);
-
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-
-    return `${hours}:${minutes}`; // Формат HH:MM
-}
-
-
-
 
 
 
@@ -126,7 +110,6 @@ async function setSecretKey() {
 
 
 
-
 function encryptMessage(message, secretKey) {
     // Шыфруем паведамленне з дапамогай AES і пераўтворым у радок
     return CryptoJS.AES.encrypt(message, secretKey).toString();
@@ -141,7 +124,7 @@ function decryptMessage(encryptedMessage, secretKey) {
 
 
 
-
+//АПРАЦОЎКА ГІСТОРЫІ
 
 function loadHistory() {
     if (loadingHistory || noMoreHistory) return;
@@ -230,24 +213,9 @@ function renderMessages(keepScrollPosition = false) {
 
 
 
-
-
-
-
 messagesContainer.addEventListener('scroll', () => {
     if (messagesContainer.scrollTop === 0 && !noMoreHistory) {
         loadHistory(); // Загружаем гісторыю толькі калі яшчэ ёсць паведамленні
-    }
-});
-
-
-
-
-
-// Абслугоўваем падзею скролу
-messagesContainer.addEventListener('scroll', () => {
-    if (messagesContainer.scrollTop === 0) {
-        loadHistory();
     }
 });
 
@@ -298,25 +266,36 @@ function sendMessage() {
             senderColor: color,
         });
 
-        input.value = ''; // Ачыстка поля ўводу
+        input.value = ''; 
     }
 }
+
+
+
+
 
 
 const chatInput = document.getElementById("chatInput");
 
 chatInput.addEventListener("keydown", (event) => {
-    if (event.key === "Enter" && !event.shiftKey) { // Shift + Enter для новага радка
-        event.preventDefault(); // Пазбегнуць пераносу радка
+    if (event.key === "Enter" && !event.shiftKey) { 
+        event.preventDefault(); 
         sendMessage();
     }
 });
 
 
 
+//Апрацоўка фармату часу
 
+function formatTime(timestamp) {
+    const date = new Date(timestamp);
 
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
 
+    return `${hours}:${minutes}`; 
+}
 
 
 

@@ -292,7 +292,7 @@ body.light-theme .article-list {
         background: transparent;
         border: none;
         overflow: hidden;
-        height: 550px;
+        height: auto;
         margin-top: 5%;
     }    
 

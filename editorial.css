@@ -124,11 +124,10 @@ body:not(.light-theme) .article-list .close-article svg{
         color: currentColor;
     }
 
-    #content{
+    #content {
         scrollbar-width: thin;
         flex: 1;
         resize: none;
-        
         border: none;
         border-radius: 0px;
         font-family: 'RobotoMono', monospace;
@@ -137,9 +136,10 @@ body:not(.light-theme) .article-list .close-article svg{
         outline: none;
         background: transparent;
         transition: all 0.3s ease;
-        height: 100%;
         width: 100%;
         color: currentColor;
+        overflow: hidden;
+        min-height: 49vh; /* Каб не было палосы пракруткі */
     }
 
     #text{
@@ -181,6 +181,13 @@ body:not(.light-theme) .article-list .close-article svg{
     /* Кнопка для светлай тэмы */
     body.light-theme #text{
         border: 1.5px solid var(--night-b); /* У светлай тэме бордэр чорны */
+    }
+
+    #chasopis{
+        margin: 0;
+        display: flex;
+        margin: 0;
+        align-items: flex-end;
     }
 
 
@@ -230,11 +237,81 @@ body:not(.light-theme) .article-list .close-article svg{
 
     @media (hover: none){
     
-        .icon-bar button:active svg {
-            fill: #dc0062; /* Плавны пераход да колеру #dc0062 */
+        .article-list::-webkit-scrollbar-thumb:active {
+            width: 12px;
         }
     
-        .article-list .close-article:active svg{
-            fill: #dc0062 !important;
-        }
+       #submit:active{
+        background-color: #dc0062;
+       }
+
+       body.light-theme #submit:active{
+        border-color: var(--night-b);
+        color: var(--day-w);
+       } 
+       body.light-theme button:active svg {
+           fill: #dc0062; /* Дадаць эфект пры навядзенні ў светлай тэме */
+       }
+       
+       body:not(.light-theme) button:active svg {
+           fill: #dc0062; /* Дадаць эфект пры навядзенні ў светлай тэме */
+       }
+       
     }
+
+
+
+    @media (max-width: 768px) {
+    
+
+        #text{
+            margin-top: 5%;
+        }
+
+    
+      
+        .icon-bar button svg {
+            width: 40px; /* Памер SVG */
+            height: 40px;
+            fill: currentColor; /* Колер іконкі адпавядае currentColor */
+            transition: fill 0.3s ease; /* Плыўная змена колеру */
+        }
+    
+        .icon-bar button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            border-radius: 0;
+            padding-left: 16px;
+            padding-bottom: 8px;
+            padding-right: 0%;
+            background-color: transparent;
+        }
+    
+        #chasopis{
+            display: none;
+        }
+    
+        #editorial {
+          
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 0.9rem; 
+        }
+    
+        .div1{
+            display: flex;
+            justify-content: flex-end;
+            
+            background-color: transparent;
+        }
+    
+        
+        
+    }
+      
+    
+      

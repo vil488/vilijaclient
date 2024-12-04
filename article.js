@@ -18,6 +18,26 @@ async function fetchArticles() {
     }
 }
 
+function checkUserRole() {
+    const userRole = localStorage.getItem('role'); // Атрымаць ролю з localStorage
+
+    // Праверыць, ці карыстальнік адміністратар
+    if (userRole === 'admin') {
+        document.getElementById('edit').style.display = 'block';
+    }
+}
+
+
+
+
+checkUserRole();
+
+
+const editBut = document.getElementById('edit').addEventListener('click',()=>{
+    window.location.href = '/editorial';
+})
+
+
 // Функцыя для адлюстравання спісу артыкулаў
 function displayArticles(articles) {
     if (articles.length > 1) {

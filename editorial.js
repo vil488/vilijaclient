@@ -4,6 +4,14 @@ document.getElementById('theme').addEventListener('click', function () {
     localStorage.setItem('theme', currentTheme);
 });
 
+const textarea = document.getElementById('content');
+
+const autoResize = (e) => {
+    e.target.style.height = 'auto'; 
+    e.target.style.height = `${e.target.scrollHeight}px`; 
+};
+
+textarea.addEventListener('input', autoResize);
 
 document.getElementById('articlepage').addEventListener('click', function () {
     if (localStorage.getItem('token')) {
@@ -34,7 +42,7 @@ if (logoutButton) {
 
      const formData = {
          title: title,
-         content: content,
+         text: content,
          author: author,
          date: date
      };
@@ -49,7 +57,9 @@ if (logoutButton) {
          });
 
          if (response.ok) {
-             alert('Дадзеныя паспяхова адпраўлены!');
+            if (localStorage.getItem('token')) {
+                window.location.href = '/article';
+            }
          } else {
              alert('Адбылася памылка пры адпраўцы дадзеных.');
          }

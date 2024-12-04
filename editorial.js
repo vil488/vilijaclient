@@ -30,7 +30,7 @@ if (logoutButton) {
 }
 
  // Выбраць форму і кнопку
- const form = document.getElementById('dataForm');
+ const form = document.getElementById('text');
  const submitBtn = document.getElementById('submit');
 
  submitBtn.addEventListener('click', async () => {
@@ -64,6 +64,8 @@ if (logoutButton) {
              alert('Адбылася памылка пры адпраўцы дадзеных.');
          }
      } catch (error) {
+        console.log('Адбылася памылка: ' + error.message);
+        
          alert('Адбылася памылка: ' + error.message);
      }
  });

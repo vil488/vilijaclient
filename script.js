@@ -1,4 +1,12 @@
-document.querySelector('.login-button').addEventListener('click', function () {
+const loginButt = document.getElementsByClassName("login-button");
+
+loginButt.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" && !event.shiftKey) {  
+        login();
+    }});
+
+
+document.querySelector('.login-button').addEventListener('click', function login () {
   const button = document.querySelector('.login-button');
   const spinner = document.querySelector('.loading-spinner');
 

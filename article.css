@@ -12,9 +12,7 @@
     --fog-g: #AAA7A7;
 }
 
-#edit{
-    display: none;
-}
+
 body {
     display: flex;
     justify-content: center;

@@ -6,7 +6,9 @@ loginButt.addEventListener("keydown", (event) => {
     }});
 
 
-document.querySelector('.login-button').addEventListener('click', function login () {
+document.querySelector('.login-button').addEventListener('click',login());
+  
+  function login () {
   const button = document.querySelector('.login-button');
   const spinner = document.querySelector('.loading-spinner');
 
@@ -68,7 +70,7 @@ document.querySelector('.login-button').addEventListener('click', function login
       spinner.style.display = 'none'; // Хаваем спінер
       button.disabled = false; // Актывуем кнопку
     });
-});
+}
 
 
 

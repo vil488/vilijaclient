@@ -1,12 +1,12 @@
-const loginButt = document.querySelector(".login-button");
-
-loginButt.addEventListener("keydown", (event) => {
-    if (event.key === "Enter" && !event.shiftKey) {  
-        login();
+const loginForm = document.querySelector('form'); // Вызначаем форму
+loginForm.addEventListener("keydown", (event) => {  // Слухаем падзею націску клавішы ў форме
+    if (event.key === "Enter" && !event.shiftKey) {  // Калі націскаем Enter
+        event.preventDefault();  // Перашкаджаем стандартнай апрацоўцы формы
+        login();  // Выклікаем функцыю login
     }
 });
 
-document.querySelector('.login-button').addEventListener('click', login);
+document.querySelector('.login-button').addEventListener('click', login); // Падзея click на кнопцы
 
 function login() {
   const button = document.querySelector('.login-button');

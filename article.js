@@ -18,24 +18,60 @@ async function fetchArticles() {
     }
 }
 
-function checkUserRole() {
-    const userRole = localStorage.getItem('role'); // Атрымаць ролю з localStorage
 
-    // Праверыць, ці карыстальнік адміністратар
-    if (userRole === 'admin') {
+function getUserRole() {
+    const token = localStorage.getItem('token');
+    if (!token) return null;
+
+    const payload = JSON.parse(atob(token.split('.')[1])); // Дэкадаванне payload з JWT
+    return payload.role; // Вяртаем ролю
+}
+
+
+function renderButtons() {
+    const role = getUserRole();
+    if (role === 'admin') {
         document.getElementById('edit').style.display = 'block';
+    } else {
+        document.getElementById('edit').style.display = 'none';
     }
 }
 
 
 
 
-checkUserRole();
 
 
-const editBut = document.getElementById('edit').addEventListener('click',()=>{
-    window.location.href = '/editorial';
-})
+
+
+
+const editBut = document.getElementById('edit').addEventListener('click', async () => {
+    try {
+        // Запыт да сервера для праверкі ролі
+        const response = await fetch('/check-admin', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}` // Токен з localStorage
+            }
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            if (data.isAdmin) {
+                // Калі карыстальнік адмін, пераходзім на старонку
+                window.location.href = '/editorial';
+            } else {
+                alert('Вы не маеце доступу да гэтай старонкі.');
+            }
+        } else {
+            alert('Не ўдалося праверыць правы доступу.');
+        }
+    } catch (error) {
+        console.error(error);
+        alert('Не атрымалася праверыць правы доступу.');
+    }
+});
+
 
 
 // Функцыя для адлюстравання спісу артыкулаў
@@ -118,4 +154,4 @@ document.getElementById('logout').addEventListener('click', function logout() {
 )
 
 // Ініцыялізацыя: загрузіць спіс артыкулаў пры старце
-document.addEventListener("DOMContentLoaded", fetchArticles);
+document.addEventListener("DOMContentLoaded", fetchArticles,renderButtons);

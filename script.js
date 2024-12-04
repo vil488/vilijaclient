@@ -40,7 +40,7 @@ document.querySelector('.login-button').addEventListener('click', function () {
       if (data.token) {
         localStorage.setItem('token', data.token);
         localStorage.setItem('username', data.username);
-        localStorage.setItem('role', data.role);
+        // localStorage.setItem('role', data.role);
         localStorage.setItem('color', data.color);
         // alert('Вітаем, ' + username + '!');
         window.location.href = '/greeting';

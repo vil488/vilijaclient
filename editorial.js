@@ -31,7 +31,7 @@ if (logoutButton) {
 
  // Выбраць форму і кнопку
  const form = document.getElementById('dataForm');
- const submitBtn = document.getElementById('submitBtn');
+ const submitBtn = document.getElementById('submit');
 
  submitBtn.addEventListener('click', async () => {
    

@@ -48,7 +48,7 @@ function renderButtons() {
 const editBut = document.getElementById('edit').addEventListener('click', async () => {
     try {
         // Запыт да сервера для праверкі ролі
-        const response = await fetch('/check-admin', {
+        const response = await fetch('https://vilija.onrender.com/check-admin', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}` // Токен з localStorage

@@ -153,5 +153,7 @@ document.getElementById('logout').addEventListener('click', function logout() {
 }
 )
 
-// Ініцыялізацыя: загрузіць спіс артыкулаў пры старце
-document.addEventListener("DOMContentLoaded", fetchArticles,renderButtons);
+document.addEventListener("DOMContentLoaded", function() {
+    fetchArticles();
+    renderButtons();
+});

@@ -41,11 +41,11 @@ if (logoutButton) {
      const date = document.getElementById('date').value;
 
      const formData = {
-         title: title,
-         text: content,
-         author: author,
-         date: date
-     };
+        title: title,
+        content: content, 
+        author: author,
+        date: date
+      };
 
      try {
          const response = await fetch('https://vilija.onrender.com/newarticle', {

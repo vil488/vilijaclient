@@ -42,7 +42,7 @@ if (logoutButton) {
 
      const formData = {
         title: title,
-        content: content, 
+        text: content, 
         author: author,
         date: date
       };

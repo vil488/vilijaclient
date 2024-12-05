@@ -98,7 +98,7 @@ function openArticle(article) {
     // Ачысціць спіс і паказаць поўны артыкул
     articlesContainer.innerHTML = `
         <h2>${article.title}</h2>
-        <p>${article.text}</p>
+        <p>${article.content}</p>
         <div class="autar">Аўтар: <span>${article.author}</span></div>
         <div class="artickeldata">Дата: <span>${article.date}</span></div>
         <button class="close-article" onclick="closeArticle()">
